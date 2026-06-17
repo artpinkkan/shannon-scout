@@ -28,8 +28,8 @@ export default function CompliancePage() {
 
       <div className="flex-1 overflow-y-auto p-6 opacity-50 pointer-events-none">
         <div className="mb-6">
-          <h1 className="text-xl font-bold text-slate-100">Compliance & Data Residency</h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <h1 className="text-xl font-bold text-neutral-900">Compliance & Data Residency</h1>
+          <p className="text-sm text-neutral-400 mt-1">
             POJK-compliant data handling, residency controls, and audit trails
           </p>
         </div>
@@ -57,21 +57,21 @@ export default function CompliancePage() {
           ].map((item) => (
             <div
               key={item.title}
-              className="bg-[#161b27] border border-[#252d40] rounded-xl p-5"
+              className="bg-white border border-neutral-200 rounded-xl p-5"
             >
               <div className="mb-3">{item.icon}</div>
-              <h3 className="text-sm font-semibold text-slate-200 mb-1">{item.title}</h3>
-              <p className="text-xs text-slate-500">{item.desc}</p>
+              <h3 className="text-sm font-semibold text-neutral-700 mb-1">{item.title}</h3>
+              <p className="text-xs text-neutral-400">{item.desc}</p>
               <p className="text-xs text-amber-400 mt-2">{item.status}</p>
             </div>
           ))}
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-[#161b27] border border-[#252d40] rounded-xl p-5">
+          <div className="bg-white border border-neutral-200 rounded-xl p-5">
             <div className="flex items-center gap-2 mb-4">
-              <Lock className="w-4 h-4 text-slate-400" />
-              <h2 className="text-sm font-semibold text-slate-200">Data Retention Policy</h2>
+              <Lock className="w-4 h-4 text-neutral-400" />
+              <h2 className="text-sm font-semibold text-neutral-700">Data Retention Policy</h2>
             </div>
             <div className="space-y-3">
               {[
@@ -82,11 +82,11 @@ export default function CompliancePage() {
               ].map((item) => (
                 <div
                   key={item.label}
-                  className="flex items-center justify-between py-2 border-b border-[#252d40]"
+                  className="flex items-center justify-between py-2 border-b border-neutral-200"
                 >
-                  <span className="text-xs text-slate-400">{item.label}</span>
+                  <span className="text-xs text-neutral-400">{item.label}</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium text-slate-200">{item.value}</span>
+                    <span className="text-xs font-medium text-neutral-700">{item.value}</span>
                     {item.locked && <Lock className="w-3 h-3 text-amber-500" />}
                   </div>
                 </div>
@@ -94,15 +94,15 @@ export default function CompliancePage() {
             </div>
           </div>
 
-          <div className="bg-[#161b27] border border-[#252d40] rounded-xl p-5">
+          <div className="bg-white border border-neutral-200 rounded-xl p-5">
             <div className="flex items-center gap-2 mb-4">
-              <Globe className="w-4 h-4 text-slate-400" />
-              <h2 className="text-sm font-semibold text-slate-200">Data Residency Map</h2>
+              <Globe className="w-4 h-4 text-neutral-400" />
+              <h2 className="text-sm font-semibold text-neutral-700">Data Residency Map</h2>
             </div>
-            <div className="h-32 bg-[#0f1117] rounded-lg border border-[#252d40] flex items-center justify-center">
+            <div className="h-32 bg-neutral-50 rounded-lg border border-neutral-200 flex items-center justify-center">
               <div className="text-center">
                 <Globe className="w-8 h-8 text-slate-700 mx-auto mb-2" />
-                <p className="text-xs text-slate-600">Indonesia region map</p>
+                <p className="text-xs text-neutral-400">Indonesia region map</p>
                 <p className="text-[10px] text-slate-700">AWS ap-southeast-3 (Jakarta)</p>
               </div>
             </div>

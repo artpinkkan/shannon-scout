@@ -19,25 +19,25 @@ interface BadgeProps {
 }
 
 const variantClasses: Record<BadgeVariant, string> = {
-  default: "bg-[#1e2535] text-slate-300 border border-[#252d40]",
-  primary: "bg-indigo-600/20 text-indigo-300 border border-indigo-600/30",
-  success: "bg-emerald-600/20 text-emerald-300 border border-emerald-600/30",
-  warning: "bg-amber-600/20 text-amber-300 border border-amber-600/30",
-  danger: "bg-red-600/20 text-red-300 border border-red-600/30",
-  info: "bg-sky-600/20 text-sky-300 border border-sky-600/30",
-  purple: "bg-purple-600/20 text-purple-300 border border-purple-600/30",
-  neutral: "bg-slate-700/30 text-slate-400 border border-slate-700/50",
+  default: "bg-[#ECEEF0] text-[#8D969E] border border-neutral-200",
+  primary: "bg-[#E6F4F7] text-[#09414D] border border-[#E6F4F7]",
+  success: "bg-[#E8F5EE] text-[#1A7F4B] border border-[#E8F5EE]",
+  warning: "bg-[#FEF3E2] text-[#B45309] border border-[#FEF3E2]",
+  danger: "bg-[#FDECEA] text-[#C0392B] border border-[#FDECEA]",
+  info: "bg-[#E6F4F7] text-[#0E5E6F] border border-[#E6F4F7]",
+  purple: "bg-[#EEF2FF] text-[#4338CA] border border-[#EEF2FF]",
+  neutral: "bg-[#ECEEF0] text-[#8D969E] border border-neutral-200",
 };
 
 const dotColors: Record<BadgeVariant, string> = {
-  default: "bg-slate-400",
-  primary: "bg-indigo-400",
-  success: "bg-emerald-400",
-  warning: "bg-amber-400",
-  danger: "bg-red-400",
-  info: "bg-sky-400",
-  purple: "bg-purple-400",
-  neutral: "bg-slate-500",
+  default: "bg-neutral-400",
+  primary: "bg-[#0E5E6F]",
+  success: "bg-[#1A7F4B]",
+  warning: "bg-[#B45309]",
+  danger: "bg-[#C0392B]",
+  info: "bg-[#0E5E6F]",
+  purple: "bg-[#4338CA]",
+  neutral: "bg-neutral-400",
 };
 
 export default function Badge({

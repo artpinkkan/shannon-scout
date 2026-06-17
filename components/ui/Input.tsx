@@ -27,24 +27,24 @@ export default function Input({
       {label && (
         <label
           htmlFor={inputId}
-          className="block text-xs font-medium text-slate-400 mb-1.5"
+          className="block text-xs font-medium text-neutral-700 mb-1.5"
         >
           {label}
         </label>
       )}
       <div className="relative">
         {leftIcon && (
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none">
             {leftIcon}
           </div>
         )}
         <input
           id={inputId}
           className={[
-            "bg-[#161b27] border border-[#252d40] text-slate-100 placeholder-slate-600",
-            "rounded-md text-sm py-2 transition-colors",
-            "focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/30",
-            error ? "border-red-500/50 focus:border-red-500 focus:ring-red-500/20" : "",
+            "bg-white border border-neutral-200 text-neutral-900 placeholder:text-neutral-400",
+            "rounded-lg text-sm h-9 transition-colors",
+            "focus:outline-none focus:border-[#0E5E6F] focus:ring-1 focus:ring-[rgba(14,94,111,0.12)]",
+            error ? "border-[#C0392B] focus:border-[#C0392B] focus:ring-[rgba(192,57,43,0.12)]" : "",
             leftIcon ? "pl-9" : "pl-3",
             rightIcon ? "pr-9" : "pr-3",
             fullWidth ? "w-full" : "",
@@ -55,16 +55,16 @@ export default function Input({
           {...props}
         />
         {rightIcon && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500">
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400">
             {rightIcon}
           </div>
         )}
       </div>
       {error && (
-        <p className="mt-1 text-xs text-red-400">{error}</p>
+        <p className="mt-1 text-xs text-[#C0392B]">{error}</p>
       )}
       {hint && !error && (
-        <p className="mt-1 text-xs text-slate-500">{hint}</p>
+        <p className="mt-1 text-xs text-neutral-400">{hint}</p>
       )}
     </div>
   );
@@ -91,7 +91,7 @@ export function Textarea({
       {label && (
         <label
           htmlFor={inputId}
-          className="block text-xs font-medium text-slate-400 mb-1.5"
+          className="block text-xs font-medium text-neutral-700 mb-1.5"
         >
           {label}
         </label>
@@ -99,18 +99,18 @@ export function Textarea({
       <textarea
         id={inputId}
         className={[
-          "w-full bg-[#161b27] border border-[#252d40] text-slate-100 placeholder-slate-600",
-          "rounded-md text-sm px-3 py-2 transition-colors resize-none",
-          "focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/30",
-          error ? "border-red-500/50" : "",
+          "w-full bg-white border border-neutral-200 text-neutral-900 placeholder:text-neutral-400",
+          "rounded-lg text-sm px-3 py-2 transition-colors resize-none",
+          "focus:outline-none focus:border-[#0E5E6F] focus:ring-1 focus:ring-[rgba(14,94,111,0.12)]",
+          error ? "border-[#C0392B]" : "",
           className,
         ]
           .filter(Boolean)
           .join(" ")}
         {...props}
       />
-      {error && <p className="mt-1 text-xs text-red-400">{error}</p>}
-      {hint && !error && <p className="mt-1 text-xs text-slate-500">{hint}</p>}
+      {error && <p className="mt-1 text-xs text-[#C0392B]">{error}</p>}
+      {hint && !error && <p className="mt-1 text-xs text-neutral-400">{hint}</p>}
     </div>
   );
 }

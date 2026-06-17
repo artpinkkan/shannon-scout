@@ -1,196 +1,315 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Header from "@/components/layout/Header";
-import PageHeader from "@/components/layout/PageHeader";
 import { INTERVIEWS } from "@/lib/mock-data";
-import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
-import { Video, Clock, CheckCircle, XCircle, Calendar, Mic, Plus } from "lucide-react";
+import {
+  Video,
+  Clock,
+  CheckCircle,
+  Calendar,
+  Mic,
+  Plus,
+  User,
+  Wifi,
+  FileText,
+  AlertCircle,
+} from "lucide-react";
 import Link from "next/link";
 
-const statusConfig = {
-  live: { variant: "danger" as const, icon: <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse inline-block" />, label: "Live" },
-  scheduled: { variant: "info" as const, icon: <Clock className="w-3.5 h-3.5" />, label: "Scheduled" },
-  completed: { variant: "success" as const, icon: <CheckCircle className="w-3.5 h-3.5" />, label: "Completed" },
-  cancelled: { variant: "neutral" as const, icon: <XCircle className="w-3.5 h-3.5" />, label: "Cancelled" },
-};
+type Interview = (typeof INTERVIEWS)[0];
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function formatDateShort(iso: string) {
+  return new Date(iso).toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+function timeUntil(iso: string) {
+  const diff = new Date(iso).getTime() - Date.now();
+  const h = Math.floor(diff / 3_600_000);
+  const m = Math.floor((diff % 3_600_000) / 60_000);
+  if (h > 0) return `in ${h}h ${m}m`;
+  if (m > 0) return `in ${m}m`;
+  return "starting soon";
+}
+
+// ── Live card ────────────────────────────────────────────────────────────────
+
+function LiveCard({ iv }: { iv: Interview }) {
+  return (
+    <div className="bg-white border border-red-200 rounded-xl p-4 hover:border-red-300 transition-colors">
+      <div className="flex items-start justify-between gap-2 mb-3">
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-neutral-900 truncate">
+            {iv.candidateName}
+          </p>
+          <p className="text-xs text-neutral-400 truncate mt-0.5">{iv.jobTitle}</p>
+        </div>
+        <span className="flex items-center gap-1.5 bg-red-50 text-red-600 text-[10px] font-semibold px-2 py-1 rounded-full shrink-0 border border-red-200">
+          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+          LIVE
+        </span>
+      </div>
+
+      <div className="space-y-1.5 mb-4">
+        <div className="flex items-center gap-2 text-xs text-neutral-400">
+          <User className="w-3.5 h-3.5 shrink-0" />
+          <span className="truncate">{iv.interviewerName} · {iv.interviewerRole}</span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-neutral-400">
+          <Clock className="w-3.5 h-3.5 shrink-0" />
+          <span>{iv.durationMinutes} min · {iv.asrProvider}</span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-neutral-400">
+          <Wifi className="w-3.5 h-3.5 shrink-0 text-emerald-500" />
+          <span className="text-emerald-600 font-medium">Connected · {iv.language === "mixed" ? "ID/EN" : "ID"}</span>
+        </div>
+      </div>
+
+      <Link href={`/dashboard/interviews/${iv.id}`} className="block">
+        <Button variant="danger" size="sm" fullWidth leftIcon={<Video className="w-4 h-4" />}>
+          Join Room
+        </Button>
+      </Link>
+    </div>
+  );
+}
+
+// ── Upcoming card ────────────────────────────────────────────────────────────
+
+function UpcomingCard({ iv }: { iv: Interview }) {
+  const until = timeUntil(iv.scheduledAt);
+  const isSoon = new Date(iv.scheduledAt).getTime() - Date.now() < 3_600_000;
+
+  return (
+    <div className="bg-white border border-neutral-200 rounded-xl p-4 hover:border-[#0E5E6F]/40 transition-colors">
+      <div className="flex items-start justify-between gap-2 mb-3">
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-neutral-900 truncate">
+            {iv.candidateName}
+          </p>
+          <p className="text-xs text-neutral-400 truncate mt-0.5">{iv.jobTitle}</p>
+        </div>
+        <span
+          className={[
+            "text-[10px] font-semibold px-2 py-1 rounded-full shrink-0 border",
+            isSoon
+              ? "bg-amber-50 text-amber-700 border-amber-200"
+              : "bg-[#E6F4F7] text-[#0E5E6F] border-[#0E5E6F]/20",
+          ].join(" ")}
+        >
+          {until}
+        </span>
+      </div>
+
+      <div className="space-y-1.5 mb-4">
+        <div className="flex items-center gap-2 text-xs text-neutral-400">
+          <User className="w-3.5 h-3.5 shrink-0" />
+          <span className="truncate">{iv.interviewerName}</span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-neutral-400">
+          <Calendar className="w-3.5 h-3.5 shrink-0" />
+          <span>{formatDate(iv.scheduledAt)}</span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-neutral-400">
+          <Clock className="w-3.5 h-3.5 shrink-0" />
+          <span>{iv.durationMinutes} min · {iv.asrProvider}</span>
+        </div>
+      </div>
+
+      <Link href={`/dashboard/interviews/${iv.id}`} className="block">
+        <Button variant="secondary" size="sm" fullWidth leftIcon={<Video className="w-4 h-4" />}>
+          Open Room
+        </Button>
+      </Link>
+    </div>
+  );
+}
+
+// ── Completed card ───────────────────────────────────────────────────────────
+
+function CompletedCard({ iv }: { iv: Interview }) {
+  return (
+    <div className="bg-white border border-neutral-200 rounded-xl p-4 hover:bg-neutral-50 transition-colors">
+      <div className="flex items-start justify-between gap-2 mb-2">
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold text-neutral-700 truncate">
+            {iv.candidateName}
+          </p>
+          <p className="text-xs text-neutral-400 truncate mt-0.5">{iv.jobTitle}</p>
+        </div>
+        <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+      </div>
+
+      <div className="flex flex-wrap gap-x-3 gap-y-1 mb-3">
+        <span className="text-xs text-neutral-400">{iv.interviewerName}</span>
+        <span className="text-xs text-neutral-300">·</span>
+        <span className="text-xs text-neutral-400">{formatDateShort(iv.scheduledAt)}</span>
+        <span className="text-xs text-neutral-300">·</span>
+        <span className="text-xs text-neutral-400">{iv.durationMinutes} min</span>
+        {iv.wer !== undefined && (
+          <>
+            <span className="text-xs text-neutral-300">·</span>
+            <span className="text-xs text-emerald-600 font-medium">WER {iv.wer}%</span>
+          </>
+        )}
+      </div>
+
+      <div className="flex items-center gap-2">
+        {iv.transcriptReady && (
+          <Link href={`/dashboard/interviews/${iv.id}/review`} className="flex-1">
+            <Button variant="ghost" size="xs" fullWidth leftIcon={<Mic className="w-3.5 h-3.5" />}>
+              AI Review
+            </Button>
+          </Link>
+        )}
+        <Link href={`/dashboard/transcripts`} className={iv.transcriptReady ? "" : "flex-1"}>
+          <Button variant="secondary" size="xs" fullWidth leftIcon={<FileText className="w-3.5 h-3.5" />}>
+            Transcript
+          </Button>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+// ── Column wrapper ───────────────────────────────────────────────────────────
+
+interface ColumnProps {
+  title: string;
+  count: number;
+  accent: "red" | "teal" | "neutral";
+  icon: React.ReactNode;
+  children: React.ReactNode;
+  emptyMessage: string;
+}
+
+function Column({ title, count, accent, icon, children, emptyMessage }: ColumnProps) {
+  const headerClass = {
+    red: "bg-red-50 border-red-200 text-red-700",
+    teal: "bg-[#E6F4F7] border-[#0E5E6F]/20 text-[#0E5E6F]",
+    neutral: "bg-neutral-50 border-neutral-200 text-neutral-600",
+  }[accent];
+
+  const countClass = {
+    red: "bg-red-100 text-red-700",
+    teal: "bg-[#0E5E6F]/10 text-[#0E5E6F]",
+    neutral: "bg-neutral-200 text-neutral-600",
+  }[accent];
+
+  return (
+    <div className="flex flex-col min-w-0">
+      {/* Column header */}
+      <div className={`flex items-center justify-between px-4 py-3 rounded-t-xl border ${headerClass} mb-0`}>
+        <div className="flex items-center gap-2">
+          {icon}
+          <span className="text-sm font-semibold">{title}</span>
+        </div>
+        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${countClass}`}>
+          {count}
+        </span>
+      </div>
+
+      {/* Cards */}
+      <div className="flex-1 overflow-y-auto border-x border-b border-neutral-200 rounded-b-xl p-3 space-y-3 bg-neutral-50 min-h-[200px]">
+        {count === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <AlertCircle className="w-8 h-8 text-neutral-200 mb-2" />
+            <p className="text-xs text-neutral-400">{emptyMessage}</p>
+          </div>
+        ) : (
+          children
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Page ─────────────────────────────────────────────────────────────────────
 
 export default function InterviewsPage() {
-  const sorted = [...INTERVIEWS].sort(
-    (a, b) => new Date(b.scheduledAt).getTime() - new Date(a.scheduledAt).getTime()
-  );
-
-  const liveInterviews = sorted.filter((i) => i.status === "live");
-  const upcomingInterviews = sorted.filter((i) => i.status === "scheduled");
-  const pastInterviews = sorted.filter((i) => ["completed", "cancelled"].includes(i.status));
+  const liveInterviews = INTERVIEWS.filter((i) => i.status === "live");
+  const upcomingInterviews = [...INTERVIEWS]
+    .filter((i) => i.status === "scheduled")
+    .sort((a, b) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime());
+  const pastInterviews = [...INTERVIEWS]
+    .filter((i) => ["completed", "cancelled"].includes(i.status))
+    .sort((a, b) => new Date(b.scheduledAt).getTime() - new Date(a.scheduledAt).getTime());
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
       <Header title="Interviews" subtitle="Schedule, join, and review interview sessions" />
 
       <div className="flex-1 overflow-y-auto p-6">
-        <PageHeader
-          title="Interviews"
-          description={`${liveInterviews.length} live · ${upcomingInterviews.length} upcoming · ${pastInterviews.length} completed`}
-          actions={
-            <Button variant="primary" size="sm" leftIcon={<Plus className="w-4 h-4" />}>
-              Schedule Interview
-            </Button>
-          }
-        />
-
-        {/* Live interviews */}
-        {liveInterviews.length > 0 && (
-          <div className="mb-6">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-              <h2 className="text-sm font-semibold text-red-400">Live Now</h2>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              {liveInterviews.map((iv) => (
-                <InterviewCard key={iv.id} interview={iv} />
-              ))}
-            </div>
+        {/* Page title row */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-xl font-semibold text-neutral-900">Interviews</h1>
+            <p className="mt-0.5 text-sm text-neutral-400">
+              {liveInterviews.length} live · {upcomingInterviews.length} upcoming · {pastInterviews.length} completed
+            </p>
           </div>
-        )}
-
-        {/* Upcoming */}
-        {upcomingInterviews.length > 0 && (
-          <div className="mb-6">
-            <h2 className="text-sm font-semibold text-slate-300 mb-3">Upcoming</h2>
-            <div className="grid grid-cols-2 gap-3">
-              {upcomingInterviews.map((iv) => (
-                <InterviewCard key={iv.id} interview={iv} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Past */}
-        <div>
-          <h2 className="text-sm font-semibold text-slate-300 mb-3">Completed</h2>
-          <div className="bg-[#161b27] border border-[#252d40] rounded-xl overflow-hidden">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-[#252d40]">
-                  <th className="text-left px-4 py-3 text-xs font-medium text-slate-500">Candidate</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-slate-500">Position</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-slate-500">Interviewer</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-slate-500">Date</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-slate-500">Duration</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-slate-500">ASR</th>
-                  <th className="text-left px-4 py-3 text-xs font-medium text-slate-500">Status</th>
-                  <th className="px-4 py-3" />
-                </tr>
-              </thead>
-              <tbody>
-                {pastInterviews.map((iv, idx) => (
-                  <tr
-                    key={iv.id}
-                    className={`hover:bg-[#1a2030] transition-colors ${idx === pastInterviews.length - 1 ? "" : "border-b border-[#252d40]"}`}
-                  >
-                    <td className="px-4 py-3 text-sm font-medium text-slate-200">
-                      {iv.candidateName}
-                    </td>
-                    <td className="px-4 py-3 text-xs text-slate-400 max-w-[160px]">
-                      <span className="truncate block">{iv.jobTitle}</span>
-                    </td>
-                    <td className="px-4 py-3 text-xs text-slate-400">{iv.interviewerName}</td>
-                    <td className="px-4 py-3 text-xs text-slate-400">
-                      {new Date(iv.scheduledAt).toLocaleDateString("en-GB", {
-                        day: "numeric", month: "short", year: "numeric"
-                      })}
-                    </td>
-                    <td className="px-4 py-3 text-xs text-slate-400">{iv.durationMinutes} min</td>
-                    <td className="px-4 py-3">
-                      <div className="flex flex-col">
-                        <span className="text-xs text-slate-400">{iv.asrProvider}</span>
-                        {iv.wer !== undefined && (
-                          <span className="text-[10px] text-slate-600">WER {iv.wer}%</span>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-1.5">
-                        {statusConfig[iv.status].icon}
-                        <Badge variant={statusConfig[iv.status].variant} size="sm">
-                          {statusConfig[iv.status].label}
-                        </Badge>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-1.5">
-                        {iv.transcriptReady && (
-                          <Link href={`/dashboard/interviews/${iv.id}/review`}>
-                            <Button variant="ghost" size="xs" leftIcon={<Mic className="w-3 h-3" />}>
-                              Review
-                            </Button>
-                          </Link>
-                        )}
-                        <Link href={`/dashboard/interviews/${iv.id}`}>
-                          <Button variant="secondary" size="xs">
-                            View
-                          </Button>
-                        </Link>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function InterviewCard({ interview }: { interview: typeof INTERVIEWS[0] }) {
-  const cfg = statusConfig[interview.status];
-  return (
-    <div
-      className={[
-        "bg-[#161b27] border rounded-xl p-4",
-        interview.status === "live" ? "border-red-600/40" : "border-[#252d40]",
-      ].join(" ")}
-    >
-      <div className="flex items-start justify-between mb-3">
-        <div>
-          <p className="text-sm font-semibold text-slate-100">{interview.candidateName}</p>
-          <p className="text-xs text-slate-500">{interview.jobTitle}</p>
-        </div>
-        <Badge variant={cfg.variant} size="sm" dot={interview.status === "live"}>
-          {cfg.label}
-        </Badge>
-      </div>
-
-      <div className="flex flex-wrap gap-x-4 gap-y-1 mb-4">
-        <div className="flex items-center gap-1.5 text-xs text-slate-400">
-          <Video className="w-3.5 h-3.5 text-slate-500" />
-          {interview.interviewerName}
-        </div>
-        <div className="flex items-center gap-1.5 text-xs text-slate-400">
-          <Calendar className="w-3.5 h-3.5 text-slate-500" />
-          {new Date(interview.scheduledAt).toLocaleDateString("en-GB", {
-            day: "numeric", month: "short", hour: "2-digit", minute: "2-digit"
-          })}
-        </div>
-        <div className="flex items-center gap-1.5 text-xs text-slate-400">
-          <Clock className="w-3.5 h-3.5 text-slate-500" />
-          {interview.durationMinutes} min
-        </div>
-      </div>
-
-      <div className="flex items-center gap-2">
-        <Link href={`/dashboard/interviews/${interview.id}`} className="flex-1">
-          <Button
-            variant={interview.status === "live" ? "danger" : "primary"}
-            size="sm"
-            fullWidth
-            leftIcon={<Video className="w-4 h-4" />}
-          >
-            {interview.status === "live" ? "Join Room" : "Open Room"}
+          <Button variant="primary" size="sm" leftIcon={<Plus className="w-4 h-4" />}>
+            Schedule Interview
           </Button>
-        </Link>
+        </div>
+
+        {/* 3-column kanban */}
+        <div className="grid grid-cols-3 gap-4 h-[calc(100vh-220px)]">
+
+          {/* Live Now */}
+          <Column
+            title="Live Now"
+            count={liveInterviews.length}
+            accent="red"
+            icon={<span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />}
+            emptyMessage="No active sessions right now"
+          >
+            {liveInterviews.map((iv) => (
+              <LiveCard key={iv.id} iv={iv} />
+            ))}
+          </Column>
+
+          {/* Upcoming */}
+          <Column
+            title="Upcoming"
+            count={upcomingInterviews.length}
+            accent="teal"
+            icon={<Calendar className="w-3.5 h-3.5" />}
+            emptyMessage="No scheduled interviews"
+          >
+            {upcomingInterviews.map((iv) => (
+              <UpcomingCard key={iv.id} iv={iv} />
+            ))}
+          </Column>
+
+          {/* Completed */}
+          <Column
+            title="Completed"
+            count={pastInterviews.length}
+            accent="neutral"
+            icon={<CheckCircle className="w-3.5 h-3.5" />}
+            emptyMessage="No completed interviews yet"
+          >
+            {pastInterviews.map((iv) => (
+              <CompletedCard key={iv.id} iv={iv} />
+            ))}
+          </Column>
+
+        </div>
       </div>
     </div>
   );

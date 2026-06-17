@@ -41,23 +41,23 @@ export default function Modal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/30"
         onClick={onClose}
       />
       {/* Modal */}
       <div
         className={[
-          "relative w-full bg-[#161b27] border border-[#252d40] rounded-xl shadow-2xl",
+          "relative w-full bg-white border border-neutral-200 rounded-xl shadow-lg",
           "animate-fade-in",
           sizeClasses[size],
         ].join(" ")}
       >
         {title && (
-          <div className="flex items-center justify-between px-5 py-4 border-b border-[#252d40]">
-            <h2 className="text-base font-semibold text-slate-100">{title}</h2>
+          <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-200">
+            <h2 className="text-base font-semibold text-neutral-900">{title}</h2>
             <button
               onClick={onClose}
-              className="p-1 text-slate-500 hover:text-slate-300 hover:bg-[#1e2535] rounded transition-colors"
+              className="p-1 text-neutral-400 hover:text-neutral-700 hover:bg-neutral-50 rounded transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -65,7 +65,7 @@ export default function Modal({
         )}
         <div className="p-5">{children}</div>
         {footer && (
-          <div className="px-5 py-4 border-t border-[#252d40] flex items-center justify-end gap-2">
+          <div className="px-5 py-4 border-t border-neutral-200 flex items-center justify-end gap-2">
             {footer}
           </div>
         )}

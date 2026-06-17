@@ -26,10 +26,10 @@ export default function Card({
     <div
       onClick={onClick}
       className={[
-        "bg-[#161b27] border border-[#252d40] rounded-xl",
+        "bg-white border border-neutral-200 rounded-lg",
         paddingClasses[padding],
         hover
-          ? "hover:border-[#2e384d] hover:bg-[#1a2030] transition-colors cursor-pointer"
+          ? "hover:border-neutral-300 hover:bg-neutral-50 transition-colors cursor-pointer"
           : "",
         onClick ? "cursor-pointer" : "",
         className,
@@ -67,7 +67,7 @@ export function CardTitle({
 }) {
   return (
     <h3
-      className={`text-sm font-semibold text-slate-200 ${className}`}
+      className={`text-sm font-semibold text-neutral-900 ${className}`}
     >
       {children}
     </h3>

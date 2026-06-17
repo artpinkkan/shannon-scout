@@ -11,26 +11,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        navy: {
-          950: "#0a0d14",
-          900: "#0f1117",
-          800: "#161b27",
-          700: "#1e2535",
-          600: "#252d40",
-          500: "#2e384d",
-        },
-        slate: {
-          850: "#1a2030",
-        },
-        accent: {
-          DEFAULT: "#6366f1",
-          light: "#818cf8",
-          dark: "#4f46e5",
-        },
+        primary: { DEFAULT: '#0E5E6F', light: '#E6F4F7', dark: '#09414D' },
+        neutral: { 0: '#FFFFFF', 50: '#F7F8F8', 100: '#ECEEF0', 200: '#D5D9DC', 400: '#8D969E', 700: '#2E3538', 900: '#0F1517' },
+        success: { DEFAULT: '#1A7F4B', light: '#E8F5EE' },
+        warning: { DEFAULT: '#B45309', light: '#FEF3E2' },
+        danger: { DEFAULT: '#C0392B', light: '#FDECEA' },
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
-        mono: ["JetBrains Mono", "Fira Code", "monospace"],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        serif: ['Lora', 'Georgia', 'serif'],
+        mono: ['JetBrains Mono', 'monospace'],
       },
       animation: {
         "fade-in": "fadeIn 0.2s ease-in-out",

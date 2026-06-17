@@ -19,16 +19,16 @@ export default function PageHeader({
         <div className="flex items-center gap-1.5 mb-2">
           {breadcrumbs.map((crumb, i) => (
             <React.Fragment key={i}>
-              {i > 0 && <span className="text-slate-600">/</span>}
+              {i > 0 && <span className="text-neutral-300">/</span>}
               {crumb.href ? (
                 <a
                   href={crumb.href}
-                  className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
+                  className="text-xs text-neutral-400 hover:text-neutral-700 transition-colors"
                 >
                   {crumb.label}
                 </a>
               ) : (
-                <span className="text-xs text-slate-400">{crumb.label}</span>
+                <span className="text-xs text-neutral-500">{crumb.label}</span>
               )}
             </React.Fragment>
           ))}
@@ -36,9 +36,9 @@ export default function PageHeader({
       )}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-100">{title}</h1>
+          <h1 className="text-xl font-semibold text-neutral-900">{title}</h1>
           {description && (
-            <p className="mt-1 text-sm text-slate-500">{description}</p>
+            <p className="mt-1 text-sm text-neutral-400">{description}</p>
           )}
         </div>
         {actions && (

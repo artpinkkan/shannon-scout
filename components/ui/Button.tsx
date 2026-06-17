@@ -22,23 +22,23 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-indigo-600 hover:bg-indigo-500 text-white border border-indigo-600 hover:border-indigo-500",
+    "bg-[#0E5E6F] text-white hover:bg-[#09414D] border border-[#0E5E6F] hover:border-[#09414D]",
   secondary:
-    "bg-[#1e2535] hover:bg-[#252d40] text-slate-200 border border-[#252d40] hover:border-[#2e384d]",
+    "bg-white border border-neutral-200 text-neutral-700 hover:bg-neutral-50",
   ghost:
-    "bg-transparent hover:bg-[#1e2535] text-slate-300 hover:text-slate-100 border border-transparent",
+    "bg-transparent hover:bg-[#E6F4F7] text-[#0E5E6F] border border-transparent",
   danger:
-    "bg-red-600/20 hover:bg-red-600/30 text-red-400 hover:text-red-300 border border-red-600/30 hover:border-red-500/50",
+    "bg-[#C0392B] text-white hover:bg-[#a93226] border border-[#C0392B]",
   success:
-    "bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 hover:text-emerald-300 border border-emerald-600/30 hover:border-emerald-500/50",
+    "bg-[#1A7F4B] text-white hover:bg-[#156b3f] border border-[#1A7F4B]",
   outline:
-    "bg-transparent hover:bg-[#1e2535] text-slate-300 hover:text-slate-100 border border-[#252d40] hover:border-[#2e384d]",
+    "bg-transparent hover:bg-neutral-50 text-neutral-700 border border-neutral-200 hover:border-neutral-300",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
   xs: "px-2 py-1 text-xs rounded",
   sm: "px-3 py-1.5 text-sm rounded-md",
-  md: "px-4 py-2 text-sm rounded-md",
+  md: "h-9 px-4 text-sm rounded-lg",
   lg: "px-5 py-2.5 text-base rounded-lg",
 };
 

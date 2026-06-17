@@ -36,14 +36,14 @@ function JobCard({ job }: { job: Job }) {
       <Card hover padding="md" className="group">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-[#252d40] rounded-lg flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 bg-neutral-100 rounded-lg flex items-center justify-center shrink-0">
               <Briefcase className="w-4 h-4 text-slate-400" />
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-slate-100 group-hover:text-indigo-300 transition-colors">
+              <h3 className="text-sm font-semibold text-neutral-900 group-hover:text-[#0E5E6F] transition-colors">
                 {job.title}
               </h3>
-              <p className="text-xs text-slate-500">{job.department}</p>
+              <p className="text-xs text-neutral-400">{job.department}</p>
             </div>
           </div>
           <Badge variant={statusVariant[job.status]}>
@@ -52,27 +52,27 @@ function JobCard({ job }: { job: Job }) {
         </div>
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mb-3">
-          <div className="flex items-center gap-1.5 text-xs text-slate-400">
-            <MapPin className="w-3.5 h-3.5 text-slate-500" />
+          <div className="flex items-center gap-1.5 text-xs text-neutral-400">
+            <MapPin className="w-3.5 h-3.5 text-neutral-400" />
             {job.location}
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-slate-400">
-            <Clock className="w-3.5 h-3.5 text-slate-500" />
+          <div className="flex items-center gap-1.5 text-xs text-neutral-400">
+            <Clock className="w-3.5 h-3.5 text-neutral-400" />
             {job.type.replace("-", " ")}
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-slate-400">
-            <Users className="w-3.5 h-3.5 text-slate-500" />
+          <div className="flex items-center gap-1.5 text-xs text-neutral-400">
+            <Users className="w-3.5 h-3.5 text-neutral-400" />
             {job.applicantCount} applicants
           </div>
         </div>
 
-        <div className="flex items-center justify-between pt-3 border-t border-[#252d40]">
+        <div className="flex items-center justify-between pt-3 border-t border-neutral-100">
           <div>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-neutral-400">
               {formatCurrency(job.salaryMin)} – {formatCurrency(job.salaryMax)}
             </p>
           </div>
-          <div className="flex items-center gap-1 text-xs text-slate-500">
+          <div className="flex items-center gap-1 text-xs text-neutral-400">
             <Calendar className="w-3 h-3" />
             Closes {new Date(job.closesAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
           </div>
@@ -134,7 +134,7 @@ export default function JobsPage() {
             fullWidth={false}
             className="w-64"
           />
-          <div className="flex items-center gap-1 p-1 bg-[#161b27] border border-[#252d40] rounded-lg">
+          <div className="flex items-center gap-1 p-1 bg-neutral-50 border border-neutral-200 rounded-lg">
             {(["all", "active", "paused", "draft"] as const).map((s) => (
               <button
                 key={s}
@@ -142,8 +142,8 @@ export default function JobsPage() {
                 className={[
                   "px-3 py-1.5 text-xs font-medium rounded transition-colors",
                   filter === s
-                    ? "bg-indigo-600 text-white"
-                    : "text-slate-400 hover:text-slate-200",
+                    ? "bg-[#0E5E6F] text-white"
+                    : "text-neutral-400 hover:text-neutral-700",
                 ].join(" ")}
               >
                 {s.charAt(0).toUpperCase() + s.slice(1)}
@@ -157,7 +157,7 @@ export default function JobsPage() {
 
         {/* Grid */}
         {filtered.length === 0 ? (
-          <div className="text-center py-16 text-slate-500">
+          <div className="text-center py-16 text-neutral-400">
             <Briefcase className="w-10 h-10 mx-auto mb-3 opacity-30" />
             <p>No jobs found matching your search.</p>
           </div>
@@ -195,8 +195,8 @@ export default function JobsPage() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Type</label>
-              <select className="w-full bg-[#0f1117] border border-[#252d40] text-slate-100 rounded-md text-sm px-3 py-2">
+              <label className="block text-xs font-medium text-neutral-700 mb-1.5">Type</label>
+              <select className="w-full bg-white border border-neutral-200 text-neutral-900 rounded-lg text-sm h-9 px-3 focus:outline-none focus:border-[#0E5E6F]">
                 <option>Full-time</option>
                 <option>Part-time</option>
                 <option>Contract</option>
@@ -204,8 +204,8 @@ export default function JobsPage() {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Status</label>
-              <select className="w-full bg-[#0f1117] border border-[#252d40] text-slate-100 rounded-md text-sm px-3 py-2">
+              <label className="block text-xs font-medium text-neutral-700 mb-1.5">Status</label>
+              <select className="w-full bg-white border border-neutral-200 text-neutral-900 rounded-lg text-sm h-9 px-3 focus:outline-none focus:border-[#0E5E6F]">
                 <option>Draft</option>
                 <option>Active</option>
               </select>
@@ -222,7 +222,7 @@ export default function JobsPage() {
             <textarea
               rows={4}
               placeholder="Describe the role, responsibilities..."
-              className="w-full bg-[#0f1117] border border-[#252d40] text-slate-100 placeholder-slate-600 rounded-md text-sm px-3 py-2 focus:outline-none focus:border-indigo-500 resize-none"
+              className="w-full bg-white border border-neutral-200 text-neutral-900 placeholder:text-neutral-400 rounded-lg text-sm px-3 py-2 focus:outline-none focus:border-[#0E5E6F] resize-none"
             />
           </div>
         </div>

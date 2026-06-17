@@ -66,7 +66,7 @@ export default function CandidatesPage() {
             fullWidth={false}
             className="w-64"
           />
-          <div className="flex items-center gap-1 p-1 bg-[#161b27] border border-[#252d40] rounded-lg">
+          <div className="flex items-center gap-1 p-1 bg-neutral-50 border border-neutral-200 rounded-lg">
             {(["all", "screening", "interview", "decision", "hired", "rejected"] as const).map(
               (s) => (
                 <button
@@ -75,8 +75,8 @@ export default function CandidatesPage() {
                   className={[
                     "px-2.5 py-1.5 text-xs font-medium rounded transition-colors capitalize",
                     stageFilter === s
-                      ? "bg-indigo-600 text-white"
-                      : "text-slate-400 hover:text-slate-200",
+                      ? "bg-[#0E5E6F] text-white"
+                      : "text-neutral-400 hover:text-neutral-700",
                   ].join(" ")}
                 >
                   {s}
@@ -88,17 +88,17 @@ export default function CandidatesPage() {
         </div>
 
         {/* Table */}
-        <div className="bg-[#161b27] border border-[#252d40] rounded-xl overflow-hidden">
+        <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-[#252d40]">
-                <th className="text-left px-4 py-3 text-xs font-medium text-slate-500">Candidate</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-slate-500">Current Role</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-slate-500">Applied For</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-slate-500">Location</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-slate-500">Stage</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-slate-500">Score</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-slate-500">Applied</th>
+              <tr className="border-b border-neutral-100">
+                <th className="text-left px-4 py-3 text-xs font-medium text-neutral-400">Candidate</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-neutral-400">Current Role</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-neutral-400">Applied For</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-neutral-400">Location</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-neutral-400">Stage</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-neutral-400">Score</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-neutral-400">Applied</th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
@@ -106,7 +106,7 @@ export default function CandidatesPage() {
               {filtered.map((c, idx) => (
                 <tr
                   key={c.id}
-                  className={`border-b border-[#252d40] hover:bg-[#1a2030] transition-colors ${
+                  className={`border-b border-neutral-100 hover:bg-neutral-50 transition-colors ${
                     idx === filtered.length - 1 ? "border-b-0" : ""
                   }`}
                 >
@@ -119,20 +119,20 @@ export default function CandidatesPage() {
                         {c.avatarInitials}
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-slate-200">{c.name}</p>
-                        <p className="text-xs text-slate-500">{c.email}</p>
+                        <p className="text-sm font-medium text-neutral-700">{c.name}</p>
+                        <p className="text-xs text-neutral-400">{c.email}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-xs text-slate-400">
+                  <td className="px-4 py-3 text-xs text-neutral-400">
                     {c.currentRole} @ {c.currentCompany}
                   </td>
-                  <td className="px-4 py-3 text-xs text-slate-400 max-w-[160px]">
+                  <td className="px-4 py-3 text-xs text-neutral-400 max-w-[160px]">
                     <span className="truncate block">{c.jobTitle}</span>
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex items-center gap-1 text-xs text-slate-400">
-                      <MapPin className="w-3 h-3 text-slate-500" />
+                    <div className="flex items-center gap-1 text-xs text-neutral-400">
+                      <MapPin className="w-3 h-3 text-neutral-400" />
                       {c.location}
                     </div>
                   </td>
@@ -144,10 +144,10 @@ export default function CandidatesPage() {
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-1">
                       <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                      <span className="text-sm font-bold text-slate-200">{c.score}</span>
+                      <span className="text-sm font-bold text-neutral-700">{c.score}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-xs text-slate-500">
+                  <td className="px-4 py-3 text-xs text-neutral-400">
                     {new Date(c.appliedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
                   </td>
                   <td className="px-4 py-3">
@@ -161,7 +161,7 @@ export default function CandidatesPage() {
           </table>
 
           {filtered.length === 0 && (
-            <div className="py-12 text-center text-slate-500">
+            <div className="py-12 text-center text-neutral-400">
               <Users className="w-8 h-8 mx-auto mb-2 opacity-30" />
               <p className="text-sm">No candidates found.</p>
             </div>

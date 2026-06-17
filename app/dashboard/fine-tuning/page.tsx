@@ -28,10 +28,10 @@ export default function FineTuningPage() {
 
       <div className="flex-1 overflow-y-auto p-6 opacity-50 pointer-events-none">
         <div className="mb-6">
-          <h1 className="text-xl font-bold text-slate-100">
+          <h1 className="text-xl font-bold text-neutral-900">
             Code-Switching ASR Fine-tuning
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-neutral-400 mt-1">
             Train custom language models on your organization's Indonesian-English code-switched data
           </p>
         </div>
@@ -39,28 +39,28 @@ export default function FineTuningPage() {
         {/* Stats */}
         <div className="grid grid-cols-4 gap-4 mb-6">
           {[
-            { label: "Annotated Utterances", value: "0", req: "500 min", icon: <Database className="w-5 h-5 text-slate-400" /> },
-            { label: "Training Jobs", value: "0", req: "Pending", icon: <Zap className="w-5 h-5 text-slate-400" /> },
-            { label: "Models Trained", value: "0", req: "—", icon: <Brain className="w-5 h-5 text-slate-400" /> },
-            { label: "WER Improvement", value: "—", req: "—", icon: <BarChart3 className="w-5 h-5 text-slate-400" /> },
+            { label: "Annotated Utterances", value: "0", req: "500 min", icon: <Database className="w-5 h-5 text-neutral-400" /> },
+            { label: "Training Jobs", value: "0", req: "Pending", icon: <Zap className="w-5 h-5 text-neutral-400" /> },
+            { label: "Models Trained", value: "0", req: "—", icon: <Brain className="w-5 h-5 text-neutral-400" /> },
+            { label: "WER Improvement", value: "—", req: "—", icon: <BarChart3 className="w-5 h-5 text-neutral-400" /> },
           ].map((s) => (
             <div
               key={s.label}
-              className="bg-[#161b27] border border-[#252d40] rounded-xl p-4"
+              className="bg-white border border-neutral-200 rounded-xl p-4"
             >
               <div className="flex items-center justify-between mb-3">
-                <p className="text-xs text-slate-500">{s.label}</p>
+                <p className="text-xs text-neutral-400">{s.label}</p>
                 {s.icon}
               </div>
-              <p className="text-2xl font-bold text-slate-100">{s.value}</p>
+              <p className="text-2xl font-bold text-neutral-900">{s.value}</p>
               <p className="text-xs text-amber-500 mt-1">{s.req}</p>
             </div>
           ))}
         </div>
 
         {/* Pipeline steps */}
-        <div className="bg-[#161b27] border border-[#252d40] rounded-xl p-5 mb-4">
-          <h2 className="text-sm font-semibold text-slate-200 mb-4">Fine-tuning Pipeline</h2>
+        <div className="bg-white border border-neutral-200 rounded-xl p-5 mb-4">
+          <h2 className="text-sm font-semibold text-neutral-700 mb-4">Fine-tuning Pipeline</h2>
           <div className="flex items-center gap-0">
             {[
               { step: "1", label: "Collect Data", desc: "500+ annotated utterances" },
@@ -71,14 +71,14 @@ export default function FineTuningPage() {
             ].map((item, i, arr) => (
               <React.Fragment key={item.step}>
                 <div className="flex flex-col items-center gap-1 flex-1">
-                  <div className="w-8 h-8 rounded-full bg-[#252d40] border-2 border-[#252d40] flex items-center justify-center text-xs font-bold text-slate-600">
+                  <div className="w-8 h-8 rounded-full bg-neutral-100 border-2 border-neutral-200 flex items-center justify-center text-xs font-bold text-neutral-400">
                     {item.step}
                   </div>
-                  <p className="text-xs font-medium text-slate-500 text-center">{item.label}</p>
+                  <p className="text-xs font-medium text-neutral-400 text-center">{item.label}</p>
                   <p className="text-[10px] text-slate-700 text-center">{item.desc}</p>
                 </div>
                 {i < arr.length - 1 && (
-                  <div className="w-8 h-0.5 bg-[#252d40] shrink-0 mb-6" />
+                  <div className="w-8 h-0.5 bg-neutral-100 shrink-0 mb-6" />
                 )}
               </React.Fragment>
             ))}
@@ -86,12 +86,12 @@ export default function FineTuningPage() {
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-[#161b27] border border-[#252d40] rounded-xl p-5">
+          <div className="bg-white border border-neutral-200 rounded-xl p-5">
             <div className="flex items-center gap-2 mb-3">
-              <Code className="w-4 h-4 text-slate-400" />
-              <h2 className="text-sm font-semibold text-slate-200">Training Config</h2>
+              <Code className="w-4 h-4 text-neutral-400" />
+              <h2 className="text-sm font-semibold text-neutral-700">Training Config</h2>
             </div>
-            <pre className="text-[10px] text-slate-600 font-mono bg-[#0f1117] p-3 rounded-lg overflow-hidden">
+            <pre className="text-[10px] text-neutral-400 font-mono bg-neutral-50 p-3 rounded-lg overflow-hidden">
 {`{
   "base_model": "whisper-medium",
   "language": "id",
@@ -104,8 +104,8 @@ export default function FineTuningPage() {
             </pre>
           </div>
 
-          <div className="bg-[#161b27] border border-[#252d40] rounded-xl p-5">
-            <h2 className="text-sm font-semibold text-slate-200 mb-3">Requirements</h2>
+          <div className="bg-white border border-neutral-200 rounded-xl p-5">
+            <h2 className="text-sm font-semibold text-neutral-700 mb-3">Requirements</h2>
             <ul className="space-y-2.5">
               {[
                 { done: false, text: "Minimum 500 annotated utterances" },
@@ -114,8 +114,8 @@ export default function FineTuningPage() {
                 { done: false, text: "Data residency confirmed (ID region)" },
                 { done: false, text: "Admin approval for model deployment" },
               ].map((req) => (
-                <li key={req.text} className="flex items-center gap-2.5 text-xs text-slate-500">
-                  <div className="w-4 h-4 rounded border-2 border-[#252d40] flex items-center justify-center shrink-0" />
+                <li key={req.text} className="flex items-center gap-2.5 text-xs text-neutral-400">
+                  <div className="w-4 h-4 rounded border-2 border-neutral-200 flex items-center justify-center shrink-0" />
                   {req.text}
                 </li>
               ))}

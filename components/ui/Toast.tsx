@@ -22,30 +22,30 @@ export function Toast({
   }, [duration, onClose]);
 
   const iconMap = {
-    success: <CheckCircle className="w-4 h-4 text-emerald-400" />,
-    error: <AlertCircle className="w-4 h-4 text-red-400" />,
-    info: <Info className="w-4 h-4 text-sky-400" />,
+    success: <CheckCircle className="w-4 h-4 text-[#1A7F4B]" />,
+    error: <AlertCircle className="w-4 h-4 text-[#C0392B]" />,
+    info: <Info className="w-4 h-4 text-[#0E5E6F]" />,
   };
 
-  const bgMap = {
-    success: "border-emerald-600/40",
-    error: "border-red-600/40",
-    info: "border-sky-600/40",
+  const borderMap = {
+    success: "border-[#E8F5EE]",
+    error: "border-[#FDECEA]",
+    info: "border-[#E6F4F7]",
   };
 
   return (
     <div
       className={[
-        "flex items-center gap-3 px-4 py-3 bg-[#1e2535] border rounded-lg shadow-xl",
+        "flex items-center gap-3 px-4 py-3 bg-white border rounded-lg shadow-sm",
         "animate-[slideUp_0.3s_ease-out]",
-        bgMap[type],
+        borderMap[type],
       ].join(" ")}
     >
       {iconMap[type]}
-      <span className="text-sm text-slate-200">{message}</span>
+      <span className="text-sm text-neutral-700">{message}</span>
       <button
         onClick={onClose}
-        className="ml-2 text-slate-500 hover:text-slate-300 transition-colors"
+        className="ml-2 text-neutral-400 hover:text-neutral-700 transition-colors"
       >
         <X className="w-3.5 h-3.5" />
       </button>

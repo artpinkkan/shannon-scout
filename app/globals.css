@@ -2,18 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  --bg-primary: #0f1117;
-  --bg-secondary: #161b27;
-  --bg-tertiary: #1e2535;
-  --border-color: #252d40;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --accent: #6366f1;
-  --accent-light: #818cf8;
+  --primary:         #0E5E6F;
+  --primary-light:   #E6F4F7;
+  --primary-dark:    #09414D;
+
+  --neutral-0:       #FFFFFF;
+  --neutral-50:      #F7F8F8;
+  --neutral-100:     #ECEEF0;
+  --neutral-200:     #D5D9DC;
+  --neutral-400:     #8D969E;
+  --neutral-700:     #2E3538;
+  --neutral-900:     #0F1517;
+
+  --success:         #1A7F4B;
+  --success-light:   #E8F5EE;
+  --warning:         #B45309;
+  --warning-light:   #FEF3E2;
+  --danger:          #C0392B;
+  --danger-light:    #FDECEA;
+
+  --code-switch-en:  #5B4FF5;
+  --code-switch-id:  #0E5E6F;
 }
 
 * {
@@ -26,14 +38,19 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  background-color: #0f1117;
-  color: #f1f5f9;
+  background-color: #FFFFFF;
+  color: #2E3538;
   font-family: 'Inter', system-ui, sans-serif;
 }
 
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Transcript font */
+.font-transcript {
+  font-family: 'Lora', Georgia, serif;
 }
 
 /* Scrollbar styling */
@@ -43,34 +60,34 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #161b27;
+  background: #F7F8F8;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #252d40;
+  background: #D5D9DC;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2e384d;
+  background: #8D969E;
 }
 
 /* Custom scrollbar for Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #252d40 #161b27;
+  scrollbar-color: #D5D9DC #F7F8F8;
 }
 
 /* Focus ring */
 *:focus-visible {
-  outline: 2px solid #6366f1;
+  outline: 2px solid #0E5E6F;
   outline-offset: 2px;
 }
 
 /* Selection */
 ::selection {
-  background: rgba(99, 102, 241, 0.3);
-  color: #f1f5f9;
+  background: rgba(14, 94, 111, 0.15);
+  color: #0F1517;
 }
 
 /* Code font */
@@ -101,7 +118,7 @@ a, button {
 
 /* Transcript highlight animations */
 @keyframes highlightFade {
-  0% { background-color: rgba(99, 102, 241, 0.4); }
+  0% { background-color: rgba(14, 94, 111, 0.2); }
   100% { background-color: transparent; }
 }
 

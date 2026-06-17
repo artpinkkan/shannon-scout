@@ -24,7 +24,7 @@ export default function Tabs({
 }: TabsProps) {
   return (
     <div
-      className={`flex items-center gap-1 border-b border-[#252d40] ${className}`}
+      className={`flex items-center gap-1 border-b border-neutral-200 ${className}`}
     >
       {tabs.map((tab) => (
         <button
@@ -33,8 +33,8 @@ export default function Tabs({
           className={[
             "flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors",
             activeTab === tab.id
-              ? "border-indigo-500 text-indigo-400"
-              : "border-transparent text-slate-500 hover:text-slate-300 hover:border-slate-600",
+              ? "border-[#0E5E6F] text-[#0E5E6F]"
+              : "border-transparent text-neutral-400 hover:text-neutral-700 hover:border-neutral-300",
           ].join(" ")}
         >
           {tab.icon}
@@ -44,8 +44,8 @@ export default function Tabs({
               className={[
                 "inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 text-xs rounded-full",
                 activeTab === tab.id
-                  ? "bg-indigo-600/30 text-indigo-300"
-                  : "bg-[#1e2535] text-slate-400",
+                  ? "bg-[#E6F4F7] text-[#0E5E6F]"
+                  : "bg-neutral-100 text-neutral-400",
               ].join(" ")}
             >
               {tab.count}

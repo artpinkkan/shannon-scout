@@ -78,10 +78,10 @@ export default function NLPSettingsPage() {
 
         <div className="grid grid-cols-2 gap-5">
           {/* ── Punctuation & Text Norm ── */}
-          <div className="bg-[#161b27] border border-[#252d40] rounded-xl p-5">
+          <div className="bg-white border border-neutral-200 rounded-xl p-5">
             <div className="flex items-center gap-2 mb-4">
-              <Activity className="w-4 h-4 text-indigo-400" />
-              <h2 className="text-sm font-semibold text-slate-200">
+              <Activity className="w-4 h-4 text-[#0E5E6F]" />
+              <h2 className="text-sm font-semibold text-neutral-700">
                 Punctuation & Text Normalization
               </h2>
             </div>
@@ -103,10 +103,10 @@ export default function NLPSettingsPage() {
           </div>
 
           {/* ── Filler Removal ── */}
-          <div className="bg-[#161b27] border border-[#252d40] rounded-xl p-5">
+          <div className="bg-white border border-neutral-200 rounded-xl p-5">
             <div className="flex items-center gap-2 mb-4">
               <Mic className="w-4 h-4 text-amber-400" />
-              <h2 className="text-sm font-semibold text-slate-200">
+              <h2 className="text-sm font-semibold text-neutral-700">
                 Filler Word Removal
               </h2>
             </div>
@@ -120,17 +120,17 @@ export default function NLPSettingsPage() {
 
             {settings.enableFillerRemoval && (
               <div className="mt-4">
-                <p className="text-xs text-slate-400 mb-2">Filler word list:</p>
+                <p className="text-xs text-neutral-400 mb-2">Filler word list:</p>
                 <div className="flex flex-wrap gap-1.5 mb-3">
                   {settings.fillerWords.map((w) => (
                     <span
                       key={w}
-                      className="flex items-center gap-1 text-xs px-2 py-0.5 bg-[#252d40] text-slate-300 rounded-full font-mono"
+                      className="flex items-center gap-1 text-xs px-2 py-0.5 bg-neutral-100 text-neutral-700 rounded-full font-mono"
                     >
                       {w}
                       <button
                         onClick={() => removeFiller(w)}
-                        className="text-slate-600 hover:text-red-400 transition-colors"
+                        className="text-neutral-400 hover:text-red-400 transition-colors"
                       >
                         <Trash2 className="w-2.5 h-2.5" />
                       </button>
@@ -144,7 +144,7 @@ export default function NLPSettingsPage() {
                     onChange={(e) => setNewFiller(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && addFiller()}
                     placeholder="Add filler word..."
-                    className="flex-1 bg-[#0f1117] border border-[#252d40] text-slate-100 placeholder-slate-600 rounded text-xs px-2.5 py-1.5 focus:outline-none focus:border-indigo-500"
+                    className="flex-1 bg-neutral-50 border border-neutral-200 text-neutral-900 placeholder:text-neutral-400 rounded text-xs px-2.5 py-1.5 focus:outline-none focus:border-[#0E5E6F]"
                   />
                   <Button variant="secondary" size="xs" onClick={addFiller}>
                     <Plus className="w-3 h-3" />
@@ -155,10 +155,10 @@ export default function NLPSettingsPage() {
           </div>
 
           {/* ── Code-Switch Labelling ── */}
-          <div className="bg-[#161b27] border border-[#252d40] rounded-xl p-5">
+          <div className="bg-white border border-neutral-200 rounded-xl p-5">
             <div className="flex items-center gap-2 mb-4">
               <Languages className="w-4 h-4 text-emerald-400" />
-              <h2 className="text-sm font-semibold text-slate-200">
+              <h2 className="text-sm font-semibold text-neutral-700">
                 Code-Switch Detection (ID ↔ EN)
               </h2>
             </div>
@@ -173,7 +173,7 @@ export default function NLPSettingsPage() {
             {settings.enableCodeSwitchLabelling && (
               <div className="mt-4 space-y-3">
                 <div>
-                  <p className="text-xs text-slate-400 mb-2">Highlight color:</p>
+                  <p className="text-xs text-neutral-400 mb-2">Highlight color:</p>
                   <div className="flex gap-2">
                     {(["yellow", "blue", "purple", "green"] as const).map((c) => (
                       <button
@@ -197,11 +197,11 @@ export default function NLPSettingsPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 p-2.5 bg-[#0f1117] rounded-lg border border-[#252d40]">
-                  <Info className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                  <p className="text-xs text-slate-500">
+                <div className="flex items-center gap-2 p-2.5 bg-neutral-50 rounded-lg border border-neutral-200">
+                  <Info className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
+                  <p className="text-xs text-neutral-400">
                     Preview:{" "}
-                    <span className="text-slate-300">
+                    <span className="text-neutral-700">
                       Saya sangat{" "}
                     </span>
                     <mark
@@ -217,7 +217,7 @@ export default function NLPSettingsPage() {
                     >
                       excited
                     </mark>
-                    <span className="text-slate-300"> untuk bergabung.</span>
+                    <span className="text-neutral-700"> untuk bergabung.</span>
                   </p>
                 </div>
               </div>
@@ -225,10 +225,10 @@ export default function NLPSettingsPage() {
           </div>
 
           {/* ── Particle Normalization ── */}
-          <div className="bg-[#161b27] border border-[#252d40] rounded-xl p-5">
+          <div className="bg-white border border-neutral-200 rounded-xl p-5">
             <div className="flex items-center gap-2 mb-4">
               <BookOpen className="w-4 h-4 text-purple-400" />
-              <h2 className="text-sm font-semibold text-slate-200">
+              <h2 className="text-sm font-semibold text-neutral-700">
                 Particle Normalization
               </h2>
             </div>
@@ -242,7 +242,7 @@ export default function NLPSettingsPage() {
 
             {settings.enableParticleNorm && (
               <div className="mt-4">
-                <p className="text-xs text-slate-400 mb-2">Target particles:</p>
+                <p className="text-xs text-neutral-400 mb-2">Target particles:</p>
                 <div className="flex flex-wrap gap-1.5 mb-3">
                   {settings.particlesTarget.map((p) => (
                     <span
@@ -266,7 +266,7 @@ export default function NLPSettingsPage() {
                     onChange={(e) => setNewParticle(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && addParticle()}
                     placeholder="Add particle..."
-                    className="flex-1 bg-[#0f1117] border border-[#252d40] text-slate-100 placeholder-slate-600 rounded text-xs px-2.5 py-1.5 focus:outline-none focus:border-indigo-500"
+                    className="flex-1 bg-neutral-50 border border-neutral-200 text-neutral-900 placeholder:text-neutral-400 rounded text-xs px-2.5 py-1.5 focus:outline-none focus:border-[#0E5E6F]"
                   />
                   <Button variant="secondary" size="xs" onClick={addParticle}>
                     <Plus className="w-3 h-3" />
@@ -277,10 +277,10 @@ export default function NLPSettingsPage() {
           </div>
 
           {/* ── Glossary Correction ── */}
-          <div className="bg-[#161b27] border border-[#252d40] rounded-xl p-5">
+          <div className="bg-white border border-neutral-200 rounded-xl p-5">
             <div className="flex items-center gap-2 mb-4">
               <BookOpen className="w-4 h-4 text-sky-400" />
-              <h2 className="text-sm font-semibold text-slate-200">
+              <h2 className="text-sm font-semibold text-neutral-700">
                 Glossary-Based Correction
               </h2>
             </div>
@@ -293,8 +293,8 @@ export default function NLPSettingsPage() {
             />
 
             <div className="mt-4">
-              <label className="block text-xs text-slate-400 mb-2">
-                Confidence threshold: <span className="text-slate-200 font-semibold">{settings.confidenceThreshold.toFixed(2)}</span>
+              <label className="block text-xs text-neutral-400 mb-2">
+                Confidence threshold: <span className="text-neutral-700 font-semibold">{settings.confidenceThreshold.toFixed(2)}</span>
               </label>
               <input
                 type="range"
@@ -305,7 +305,7 @@ export default function NLPSettingsPage() {
                 onChange={(e) => update("confidenceThreshold", parseFloat(e.target.value))}
                 className="w-full accent-indigo-600"
               />
-              <div className="flex justify-between text-[10px] text-slate-600 mt-0.5">
+              <div className="flex justify-between text-[10px] text-neutral-400 mt-0.5">
                 <span>0.50</span>
                 <span>0.75</span>
                 <span>0.99</span>
@@ -314,10 +314,10 @@ export default function NLPSettingsPage() {
           </div>
 
           {/* ── Diarization ── */}
-          <div className="bg-[#161b27] border border-[#252d40] rounded-xl p-5">
+          <div className="bg-white border border-neutral-200 rounded-xl p-5">
             <div className="flex items-center gap-2 mb-4">
-              <Users className="w-4 h-4 text-indigo-400" />
-              <h2 className="text-sm font-semibold text-slate-200">
+              <Users className="w-4 h-4 text-[#0E5E6F]" />
+              <h2 className="text-sm font-semibold text-neutral-700">
                 Speaker Diarization
               </h2>
             </div>
@@ -332,25 +332,25 @@ export default function NLPSettingsPage() {
             {settings.diarizationEnabled && (
               <div className="mt-4 grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1.5">Min speakers</label>
+                  <label className="block text-xs text-neutral-400 mb-1.5">Min speakers</label>
                   <input
                     type="number"
                     min={1}
                     max={8}
                     value={settings.minSpeakers}
                     onChange={(e) => update("minSpeakers", parseInt(e.target.value))}
-                    className="w-full bg-[#0f1117] border border-[#252d40] text-slate-100 rounded text-sm px-3 py-1.5 focus:outline-none focus:border-indigo-500"
+                    className="w-full bg-neutral-50 border border-neutral-200 text-neutral-900 rounded text-sm px-3 py-1.5 focus:outline-none focus:border-[#0E5E6F]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-slate-400 mb-1.5">Max speakers</label>
+                  <label className="block text-xs text-neutral-400 mb-1.5">Max speakers</label>
                   <input
                     type="number"
                     min={1}
                     max={8}
                     value={settings.maxSpeakers}
                     onChange={(e) => update("maxSpeakers", parseInt(e.target.value))}
-                    className="w-full bg-[#0f1117] border border-[#252d40] text-slate-100 rounded text-sm px-3 py-1.5 focus:outline-none focus:border-indigo-500"
+                    className="w-full bg-neutral-50 border border-neutral-200 text-neutral-900 rounded text-sm px-3 py-1.5 focus:outline-none focus:border-[#0E5E6F]"
                   />
                 </div>
               </div>
@@ -358,19 +358,19 @@ export default function NLPSettingsPage() {
           </div>
 
           {/* ── ASR Performance ── */}
-          <div className="col-span-2 bg-[#161b27] border border-[#252d40] rounded-xl p-5">
+          <div className="col-span-2 bg-white border border-neutral-200 rounded-xl p-5">
             <div className="flex items-center gap-2 mb-4">
               <Activity className="w-4 h-4 text-emerald-400" />
-              <h2 className="text-sm font-semibold text-slate-200">
+              <h2 className="text-sm font-semibold text-neutral-700">
                 ASR Performance Targets
               </h2>
             </div>
 
             <div className="grid grid-cols-2 gap-5">
               <div>
-                <label className="block text-xs text-slate-400 mb-2">
+                <label className="block text-xs text-neutral-400 mb-2">
                   ASR Latency Target:{" "}
-                  <span className="text-slate-200 font-semibold">{settings.asrLatencyTargetMs}ms</span>
+                  <span className="text-neutral-700 font-semibold">{settings.asrLatencyTargetMs}ms</span>
                 </label>
                 <input
                   type="range"
@@ -381,7 +381,7 @@ export default function NLPSettingsPage() {
                   onChange={(e) => update("asrLatencyTargetMs", parseInt(e.target.value))}
                   className="w-full accent-indigo-600"
                 />
-                <div className="flex justify-between text-[10px] text-slate-600 mt-0.5">
+                <div className="flex justify-between text-[10px] text-neutral-400 mt-0.5">
                   <span>100ms</span>
                   <span className="text-emerald-500">Realtime ≤400ms</span>
                   <span>1000ms</span>
@@ -389,17 +389,17 @@ export default function NLPSettingsPage() {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="flex-1 p-3 bg-[#0f1117] rounded-lg border border-[#252d40]">
-                  <p className="text-[10px] text-slate-500 mb-0.5">Current WER</p>
-                  <p className="text-xl font-bold text-slate-100">8.2%</p>
+                <div className="flex-1 p-3 bg-neutral-50 rounded-lg border border-neutral-200">
+                  <p className="text-[10px] text-neutral-400 mb-0.5">Current WER</p>
+                  <p className="text-xl font-bold text-neutral-900">8.2%</p>
                   <div className="flex items-center gap-1 mt-0.5">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                     <p className="text-[10px] text-emerald-400">Below 10% target</p>
                   </div>
                 </div>
-                <div className="flex-1 p-3 bg-[#0f1117] rounded-lg border border-[#252d40]">
-                  <p className="text-[10px] text-slate-500 mb-0.5">Current DER</p>
-                  <p className="text-xl font-bold text-slate-100">5.1%</p>
+                <div className="flex-1 p-3 bg-neutral-50 rounded-lg border border-neutral-200">
+                  <p className="text-[10px] text-neutral-400 mb-0.5">Current DER</p>
+                  <p className="text-xl font-bold text-neutral-900">5.1%</p>
                   <div className="flex items-center gap-1 mt-0.5">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                     <p className="text-[10px] text-emerald-400">Excellent</p>
