@@ -7,9 +7,11 @@ import PageHeader from "@/components/layout/PageHeader";
 import {
   getJobById,
   getCandidatesByJobId,
+  getCandidateById,
+  getAuditEntriesByJobId,
   formatCurrency,
 } from "@/lib/mock-data";
-import type { Candidate, PipelineStage } from "@/lib/types";
+import type { Candidate, PipelineStage, AuditEntityType } from "@/lib/types";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
@@ -27,7 +29,40 @@ import {
   ExternalLink,
   Tag,
   BarChart2,
+  Shield,
+  ChevronDown,
+  ChevronUp,
+  Sparkles,
+  FileSignature,
+  Stethoscope,
+  PenLine,
 } from "lucide-react";
+
+const AUDIT_ICON: Record<AuditEntityType, React.ReactNode> = {
+  ranking_generated: <Sparkles className="w-3 h-3 text-[#0E5E6F]" />,
+  stage_advanced: <ChevronRight className="w-3 h-3 text-[#1A7F4B]" />,
+  document_sent: <FileSignature className="w-3 h-3 text-indigo-500" />,
+  medical_requested: <Stethoscope className="w-3 h-3 text-amber-500" />,
+  custom_action: <PenLine className="w-3 h-3 text-neutral-500" />,
+};
+
+const AUDIT_BG: Record<AuditEntityType, string> = {
+  ranking_generated: "bg-[#E6F4F7]",
+  stage_advanced: "bg-[#E8F5EE]",
+  document_sent: "bg-indigo-50",
+  medical_requested: "bg-amber-50",
+  custom_action: "bg-neutral-100",
+};
+
+function formatAuditTime(iso: string) {
+  return new Date(iso).toLocaleString("id-ID", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 
 const STAGES: { id: PipelineStage; label: string; color: string }[] = [
   { id: "screening", label: "Screening", color: "bg-neutral-400" },
@@ -104,7 +139,9 @@ export default function JobDetailClient() {
   const jobId = params.id as string;
   const job = getJobById(jobId);
   const allCandidates = getCandidatesByJobId(jobId);
+  const auditEntries = job ? getAuditEntriesByJobId(jobId) : [];
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
+  const [auditOpen, setAuditOpen] = useState(false);
 
   if (!job) {
     return (
@@ -223,6 +260,63 @@ export default function JobDetailClient() {
               );
             })}
           </div>
+        </div>
+
+        {/* ── Audit Trail ── */}
+        <div className="mb-4">
+          <button
+            onClick={() => setAuditOpen((v) => !v)}
+            className="w-full flex items-center justify-between px-4 py-3 bg-white border border-neutral-200 rounded-2xl hover:bg-neutral-50 transition-colors"
+          >
+            <div className="flex items-center gap-2">
+              <Shield className="w-4 h-4 text-neutral-500" />
+              <span className="text-sm font-semibold text-neutral-700">Audit Trail</span>
+              <span className="text-[11px] px-2 py-0.5 bg-neutral-100 text-neutral-500 rounded-full">
+                {auditEntries.length} entries
+              </span>
+            </div>
+            {auditOpen ? (
+              <ChevronUp className="w-4 h-4 text-neutral-400" />
+            ) : (
+              <ChevronDown className="w-4 h-4 text-neutral-400" />
+            )}
+          </button>
+
+          {auditOpen && (
+            <div className="mt-2 bg-white border border-neutral-200 rounded-2xl overflow-hidden">
+              {auditEntries.length === 0 ? (
+                <p className="text-xs text-neutral-400 text-center py-6">No audit entries yet.</p>
+              ) : (
+                auditEntries.map((entry, i) => {
+                  const candidate = getCandidateById(entry.candidateId);
+                  return (
+                    <div
+                      key={entry.id}
+                      className={`flex items-start gap-3 px-4 py-3 ${
+                        i < auditEntries.length - 1 ? "border-b border-neutral-100" : ""
+                      }`}
+                    >
+                      <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${AUDIT_BG[entry.entityType]}`}>
+                        {AUDIT_ICON[entry.entityType]}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <span className="text-xs font-semibold text-neutral-700">
+                          {entry.action}
+                        </span>
+                        <p className="text-[11px] text-neutral-400 mt-0.5">
+                          {candidate?.name ?? entry.candidateId} · {entry.details}
+                        </p>
+                      </div>
+                      <div className="shrink-0 text-right">
+                        <p className="text-[10px] text-neutral-400">{formatAuditTime(entry.timestamp)}</p>
+                        <p className="text-[10px] text-neutral-400 font-medium">{entry.actor}</p>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          )}
         </div>
       </div>
 

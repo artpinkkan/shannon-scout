@@ -29,6 +29,7 @@ export default function LoginPage() {
 
     // Accept any email + any password (min 4 chars)
     if (password.length >= 4) {
+      localStorage.setItem("shannon_session", JSON.stringify({ email }));
       router.push("/dashboard");
     } else {
       setError("Password minimal 4 karakter.");

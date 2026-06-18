@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   Briefcase,
@@ -48,6 +48,12 @@ const phase2NavItems: NavItem[] = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    localStorage.removeItem("shannon_session");
+    router.push("/login");
+  };
 
   const isActive = (href: string) => {
     if (href === "/dashboard") return pathname === "/dashboard";
@@ -156,7 +162,11 @@ export default function Sidebar() {
               {CURRENT_USER.role}
             </p>
           </div>
-          <button className="text-neutral-400 hover:text-neutral-700 transition-colors">
+          <button
+            onClick={handleLogout}
+            className="text-neutral-400 hover:text-red-500 transition-colors"
+            title="Sign out"
+          >
             <LogOut className="w-3.5 h-3.5" />
           </button>
         </div>
