@@ -68,6 +68,7 @@ export default function GlossaryPage() {
   const [search, setSearch] = useState("");
   const [catFilter, setCatFilter] = useState<"all" | GlossaryCategory>("all");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [editTerm, setEditTerm] = useState<GlossaryTerm | null>(null);
   const [terms, setTerms] = useState(GLOSSARY_TERMS);
   const [newTerm, setNewTerm] = useState({
     term: "",
@@ -264,7 +265,10 @@ export default function GlossaryPage() {
                       </td>
                       <td className="px-4 py-2.5">
                         <div className="flex items-center gap-1">
-                          <button className="p-1 text-neutral-400 hover:text-neutral-700 transition-colors">
+                          <button
+                            onClick={() => setEditTerm(t)}
+                            className="p-1 text-neutral-400 hover:text-neutral-700 transition-colors"
+                          >
                             <Edit3 className="w-3 h-3" />
                           </button>
                           <button
@@ -412,6 +416,64 @@ export default function GlossaryPage() {
           </div>
         </div>
       </Modal>
+
+      {/* Edit Term Modal */}
+      {editTerm && (
+        <Modal
+          isOpen={!!editTerm}
+          onClose={() => setEditTerm(null)}
+          title="Edit Glossary Term"
+          size="md"
+          footer={
+            <>
+              <Button variant="ghost" onClick={() => setEditTerm(null)}>Cancel</Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  setTerms((prev) => prev.map((t) => t.id === editTerm.id ? editTerm : t));
+                  setEditTerm(null);
+                  showToast(`Term "${editTerm.term}" updated`, "success");
+                }}
+              >
+                Save Changes
+              </Button>
+            </>
+          }
+        >
+          <div className="space-y-4">
+            <Input
+              label="Term / Acronym"
+              value={editTerm.term}
+              onChange={(e) => setEditTerm({ ...editTerm, term: e.target.value })}
+            />
+            <Input
+              label="Full Expansion (optional)"
+              value={editTerm.expansion ?? ""}
+              onChange={(e) => setEditTerm({ ...editTerm, expansion: e.target.value })}
+            />
+            <Input
+              label="Pronunciation hint (optional)"
+              value={editTerm.pronunciation ?? ""}
+              onChange={(e) => setEditTerm({ ...editTerm, pronunciation: e.target.value })}
+            />
+            <div>
+              <label className="block text-xs font-medium text-neutral-700 mb-1.5">Category</label>
+              <select
+                value={editTerm.category}
+                onChange={(e) => setEditTerm({ ...editTerm, category: e.target.value as GlossaryCategory })}
+                className="w-full bg-white border border-neutral-200 text-neutral-900 rounded-lg text-sm h-9 px-3 focus:outline-none focus:border-[#0E5E6F]"
+              >
+                <option value="custom">Custom</option>
+                <option value="finance">Finance</option>
+                <option value="tech">Tech</option>
+                <option value="hr">HR</option>
+                <option value="banking">Banking</option>
+                <option value="acronym">Acronym</option>
+              </select>
+            </div>
+          </div>
+        </Modal>
+      )}
 
       <ToastContainer toasts={toasts} onRemove={removeToast} />
     </div>

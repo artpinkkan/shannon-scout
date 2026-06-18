@@ -8,13 +8,17 @@ import {
   getJobById,
   getCandidatesByJobId,
   getCandidateById,
-  getAuditEntriesByJobId,
   formatCurrency,
 } from "@/lib/mock-data";
-import type { Candidate, PipelineStage, AuditEntityType } from "@/lib/types";
+import type { Candidate, PipelineStage, Job } from "@/lib/types";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
+import MoveStageModal from "@/components/ui/MoveStageModal";
+import AuditTrailDrawer from "@/components/ui/AuditTrailDrawer";
+import ScheduleInterviewModal from "@/components/ui/ScheduleInterviewModal";
+import EditJobModal from "@/components/ui/EditJobModal";
+import { useToast, ToastContainer } from "@/components/ui/Toast";
 import {
   MapPin,
   Clock,
@@ -22,47 +26,15 @@ import {
   Users,
   Briefcase,
   Star,
-  MessageSquare,
-  ChevronRight,
   Mail,
   Phone,
   ExternalLink,
   Tag,
   BarChart2,
   Shield,
-  ChevronDown,
-  ChevronUp,
-  Sparkles,
-  FileSignature,
-  Stethoscope,
-  PenLine,
+  Video,
+  Edit,
 } from "lucide-react";
-
-const AUDIT_ICON: Record<AuditEntityType, React.ReactNode> = {
-  ranking_generated: <Sparkles className="w-3 h-3 text-[#0E5E6F]" />,
-  stage_advanced: <ChevronRight className="w-3 h-3 text-[#1A7F4B]" />,
-  document_sent: <FileSignature className="w-3 h-3 text-indigo-500" />,
-  medical_requested: <Stethoscope className="w-3 h-3 text-amber-500" />,
-  custom_action: <PenLine className="w-3 h-3 text-neutral-500" />,
-};
-
-const AUDIT_BG: Record<AuditEntityType, string> = {
-  ranking_generated: "bg-[#E6F4F7]",
-  stage_advanced: "bg-[#E8F5EE]",
-  document_sent: "bg-indigo-50",
-  medical_requested: "bg-amber-50",
-  custom_action: "bg-neutral-100",
-};
-
-function formatAuditTime(iso: string) {
-  return new Date(iso).toLocaleString("id-ID", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
 
 const STAGES: { id: PipelineStage; label: string; color: string }[] = [
   { id: "screening", label: "Screening", color: "bg-neutral-400" },
@@ -137,13 +109,17 @@ export default function JobDetailClient() {
   const params = useParams();
   const router = useRouter();
   const jobId = params.id as string;
-  const job = getJobById(jobId);
-  const allCandidates = getCandidatesByJobId(jobId);
-  const auditEntries = job ? getAuditEntriesByJobId(jobId) : [];
+  const jobData = getJobById(jobId);
+  const [job, setJob] = useState<Job | undefined>(jobData);
+  const [candidates, setCandidates] = useState<Candidate[]>(() => getCandidatesByJobId(jobId));
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
-  const [auditOpen, setAuditOpen] = useState(false);
+  const [moveStageOpen, setMoveStageOpen] = useState(false);
+  const [auditDrawerOpen, setAuditDrawerOpen] = useState(false);
+  const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
+  const [editJobOpen, setEditJobOpen] = useState(false);
+  const { toasts, showToast, removeToast } = useToast();
 
-  if (!job) {
+  if (!job || !jobData) {
     return (
       <div className="flex flex-col h-full">
         <Header title="Job Not Found" />
@@ -176,12 +152,27 @@ export default function JobDetailClient() {
               <Button
                 variant="secondary"
                 size="sm"
+                onClick={() => setAuditDrawerOpen(true)}
+              >
+                <Shield className="w-3.5 h-3.5 mr-1.5" />
+                Audit Trail
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
                 onClick={() => router.push(`/dashboard/jobs/${jobId}/ranking`)}
               >
                 <BarChart2 className="w-3.5 h-3.5 mr-1.5" />
                 View Rankings
               </Button>
-              <Button variant="secondary" size="sm">Edit Job</Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setEditJobOpen(true)}
+              >
+                <Edit className="w-3.5 h-3.5 mr-1.5" />
+                Edit Job
+              </Button>
             </div>
           }
         />
@@ -205,7 +196,7 @@ export default function JobDetailClient() {
             },
             {
               label: "Applicants",
-              value: `${allCandidates.length} total`,
+              value: `${candidates.length} total`,
               icon: <Users className="w-4 h-4 text-neutral-400" />,
             },
           ].map((item) => (
@@ -228,7 +219,7 @@ export default function JobDetailClient() {
           </h2>
           <div className="grid grid-cols-5 gap-3">
             {STAGES.map((stage) => {
-              const stageCandidates = allCandidates.filter(
+              const stageCandidates = candidates.filter(
                 (c) => c.stage === stage.id
               );
               return (
@@ -262,62 +253,6 @@ export default function JobDetailClient() {
           </div>
         </div>
 
-        {/* ── Audit Trail ── */}
-        <div className="mb-4">
-          <button
-            onClick={() => setAuditOpen((v) => !v)}
-            className="w-full flex items-center justify-between px-4 py-3 bg-white border border-neutral-200 rounded-2xl hover:bg-neutral-50 transition-colors"
-          >
-            <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-neutral-500" />
-              <span className="text-sm font-semibold text-neutral-700">Audit Trail</span>
-              <span className="text-[11px] px-2 py-0.5 bg-neutral-100 text-neutral-500 rounded-full">
-                {auditEntries.length} entries
-              </span>
-            </div>
-            {auditOpen ? (
-              <ChevronUp className="w-4 h-4 text-neutral-400" />
-            ) : (
-              <ChevronDown className="w-4 h-4 text-neutral-400" />
-            )}
-          </button>
-
-          {auditOpen && (
-            <div className="mt-2 bg-white border border-neutral-200 rounded-2xl overflow-hidden">
-              {auditEntries.length === 0 ? (
-                <p className="text-xs text-neutral-400 text-center py-6">No audit entries yet.</p>
-              ) : (
-                auditEntries.map((entry, i) => {
-                  const candidate = getCandidateById(entry.candidateId);
-                  return (
-                    <div
-                      key={entry.id}
-                      className={`flex items-start gap-3 px-4 py-3 ${
-                        i < auditEntries.length - 1 ? "border-b border-neutral-100" : ""
-                      }`}
-                    >
-                      <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${AUDIT_BG[entry.entityType]}`}>
-                        {AUDIT_ICON[entry.entityType]}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <span className="text-xs font-semibold text-neutral-700">
-                          {entry.action}
-                        </span>
-                        <p className="text-[11px] text-neutral-400 mt-0.5">
-                          {candidate?.name ?? entry.candidateId} · {entry.details}
-                        </p>
-                      </div>
-                      <div className="shrink-0 text-right">
-                        <p className="text-[10px] text-neutral-400">{formatAuditTime(entry.timestamp)}</p>
-                        <p className="text-[10px] text-neutral-400 font-medium">{entry.actor}</p>
-                      </div>
-                    </div>
-                  );
-                })
-              )}
-            </div>
-          )}
-        </div>
       </div>
 
       {selectedCandidate && (
@@ -335,10 +270,19 @@ export default function JobDetailClient() {
               >
                 Close
               </Button>
-              <Button variant="secondary" size="sm">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setMoveStageOpen(true)}
+              >
                 Move Stage
               </Button>
-              <Button variant="primary" size="sm">
+              <Button
+                variant="primary"
+                size="sm"
+                leftIcon={<Video className="w-3.5 h-3.5" />}
+                onClick={() => setScheduleModalOpen(true)}
+              >
                 Schedule Interview
               </Button>
             </div>
@@ -450,6 +394,67 @@ export default function JobDetailClient() {
           </div>
         </Modal>
       )}
+
+      {moveStageOpen && selectedCandidate && (
+        <MoveStageModal
+          candidateName={selectedCandidate.name}
+          currentStage={selectedCandidate.stage}
+          onConfirm={(newStage, reason) => {
+            setCandidates((prev) =>
+              prev.map((c) =>
+                c.id === selectedCandidate.id ? { ...c, stage: newStage } : c
+              )
+            );
+            setSelectedCandidate((prev) =>
+              prev ? { ...prev, stage: newStage } : prev
+            );
+            setMoveStageOpen(false);
+            showToast(
+              `${selectedCandidate.name} moved to ${newStage.charAt(0).toUpperCase() + newStage.slice(1)}${reason ? ` — "${reason}"` : ""}`,
+              "success"
+            );
+          }}
+          onClose={() => setMoveStageOpen(false)}
+        />
+      )}
+
+      <AuditTrailDrawer
+        jobId={jobId}
+        isOpen={auditDrawerOpen}
+        onClose={() => setAuditDrawerOpen(false)}
+      />
+
+      {scheduleModalOpen && selectedCandidate && (
+        <ScheduleInterviewModal
+          prefilledCandidateId={selectedCandidate.id}
+          prefilledCandidateName={selectedCandidate.name}
+          prefilledJobId={jobId}
+          prefilledJobTitle={job.title}
+          onConfirm={(data) => {
+            setScheduleModalOpen(false);
+            setSelectedCandidate(null);
+            showToast(
+              `Interview scheduled for ${data.candidateName} on ${data.date} at ${data.time}`,
+              "success"
+            );
+          }}
+          onClose={() => setScheduleModalOpen(false)}
+        />
+      )}
+
+      {editJobOpen && (
+        <EditJobModal
+          job={job}
+          onConfirm={(updated) => {
+            setJob((prev) => (prev ? { ...prev, ...updated } : prev));
+            setEditJobOpen(false);
+            showToast("Job updated successfully", "success");
+          }}
+          onClose={() => setEditJobOpen(false)}
+        />
+      )}
+
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
     </div>
   );
 }

@@ -8,6 +8,9 @@ import { getCandidateById, INTERVIEWS, formatCurrency } from "@/lib/mock-data";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
+import MoveStageModal from "@/components/ui/MoveStageModal";
+import ScheduleInterviewModal from "@/components/ui/ScheduleInterviewModal";
+import { useToast, ToastContainer } from "@/components/ui/Toast";
 import {
   Mail,
   Phone,
@@ -38,6 +41,10 @@ export default function CandidateDetailClient() {
   const params = useParams();
   const candidate = getCandidateById(params.id as string);
   const [newNote, setNewNote] = useState("");
+  const [moveStageOpen, setMoveStageOpen] = useState(false);
+  const [scheduleOpen, setScheduleOpen] = useState(false);
+  const [currentStage, setCurrentStage] = useState(candidate?.stage);
+  const { toasts, showToast, removeToast } = useToast();
 
   if (!candidate) {
     return (
@@ -55,7 +62,6 @@ export default function CandidateDetailClient() {
   );
 
   const STAGES: PipelineStage[] = ["screening", "interview", "decision", "hired", "rejected"];
-  const stageIdx = STAGES.indexOf(candidate.stage);
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
@@ -73,8 +79,15 @@ export default function CandidateDetailClient() {
           ]}
           actions={
             <div className="flex items-center gap-2">
-              <Button variant="secondary" size="sm">Move Stage</Button>
-              <Button variant="primary" size="sm" leftIcon={<Video className="w-4 h-4" />}>
+              <Button variant="secondary" size="sm" onClick={() => setMoveStageOpen(true)}>
+                Move Stage
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                leftIcon={<Video className="w-4 h-4" />}
+                onClick={() => setScheduleOpen(true)}
+              >
                 Schedule Interview
               </Button>
             </div>
@@ -99,8 +112,8 @@ export default function CandidateDetailClient() {
                 </p>
                 <p className="text-xs text-neutral-400">{candidate.currentCompany}</p>
                 <div className="flex items-center gap-2 mt-3">
-                  <Badge variant={stageVariant[candidate.stage]} dot>
-                    {candidate.stage.charAt(0).toUpperCase() + candidate.stage.slice(1)}
+                  <Badge variant={stageVariant[currentStage!]} dot>
+                    {currentStage!.charAt(0).toUpperCase() + currentStage!.slice(1)}
                   </Badge>
                   <div className="flex items-center gap-1">
                     <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
@@ -200,9 +213,10 @@ export default function CandidateDetailClient() {
               </h3>
               <div className="flex items-center gap-0">
                 {STAGES.map((stage, i) => {
-                  const isActive = i === stageIdx;
-                  const isDone = i < stageIdx;
-                  const isRejected = candidate.stage === "rejected";
+                  const activeIdx = STAGES.indexOf(currentStage!);
+                  const isActive = i === activeIdx;
+                  const isDone = i < activeIdx;
+                  const isRejected = currentStage === "rejected";
                   return (
                     <React.Fragment key={stage}>
                       <div className="flex flex-col items-center">
@@ -351,6 +365,41 @@ export default function CandidateDetailClient() {
           </div>
         </div>
       </div>
+
+      {scheduleOpen && (
+        <ScheduleInterviewModal
+          prefilledCandidateId={candidate.id}
+          prefilledCandidateName={candidate.name}
+          prefilledJobId={candidate.jobId}
+          prefilledJobTitle={candidate.jobTitle}
+          onConfirm={(data) => {
+            setScheduleOpen(false);
+            showToast(
+              `Interview scheduled for ${data.date} at ${data.time} with ${data.interviewerName}`,
+              "success"
+            );
+          }}
+          onClose={() => setScheduleOpen(false)}
+        />
+      )}
+
+      {moveStageOpen && currentStage && (
+        <MoveStageModal
+          candidateName={candidate.name}
+          currentStage={currentStage}
+          onConfirm={(newStage, reason) => {
+            setCurrentStage(newStage);
+            setMoveStageOpen(false);
+            showToast(
+              `${candidate.name} moved to ${newStage.charAt(0).toUpperCase() + newStage.slice(1)}${reason ? ` — "${reason}"` : ""}`,
+              "success"
+            );
+          }}
+          onClose={() => setMoveStageOpen(false)}
+        />
+      )}
+
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
     </div>
   );
 }

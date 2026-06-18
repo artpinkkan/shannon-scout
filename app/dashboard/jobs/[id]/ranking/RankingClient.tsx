@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -15,6 +15,7 @@ import type {
   NextActionType,
   ScoreDimension,
 } from "@/lib/types";
+import { addAuditEntry } from "@/lib/audit-store";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import { useToast, ToastContainer } from "@/components/ui/Toast";
@@ -407,6 +408,19 @@ export default function RankingClient() {
   const [actioned, setActioned] = useState<Set<string>>(new Set());
   const { toasts, showToast, removeToast } = useToast();
 
+  useEffect(() => {
+    if (job) {
+      addAuditEntry({
+        jobId,
+        candidateId: "system",
+        entityType: "ranking_generated",
+        action: "AI Ranking viewed",
+        details: `Recruiter opened the AI Ranking page for ${job.title} (${baseRankings.length} candidates)`,
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jobId]);
+
   const sorted = useMemo(() => {
     return [...baseRankings].sort((a, b) => {
       const av = sortKey === "aiScore" ? a.aiScore : a.scoreBreakdown[sortKey];
@@ -445,6 +459,21 @@ export default function RankingClient() {
         : action === "employment_agreement"
         ? "Employment Agreement (PKS) sent"
         : `Custom: ${note}`;
+
+    const entityType =
+      action === "medical_checkup"
+        ? "medical_requested" as const
+        : action === "employment_agreement"
+        ? "document_sent" as const
+        : "custom_action" as const;
+
+    addAuditEntry({
+      jobId,
+      candidateId: modal.candidateId,
+      entityType,
+      action: actionLabel,
+      details: action === "custom" ? note : `Triggered from AI Ranking — AI Score: ${modal.aiScore}`,
+    });
 
     setActioned((prev) => {
       const next = new Set(prev);

@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import Header from "@/components/layout/Header";
 import { INTERVIEWS } from "@/lib/mock-data";
 import Button from "@/components/ui/Button";
+import ScheduleInterviewModal from "@/components/ui/ScheduleInterviewModal";
+import { useToast, ToastContainer } from "@/components/ui/Toast";
 import {
   Video,
   Clock,
@@ -241,6 +243,9 @@ function Column({ title, count, accent, icon, children, emptyMessage }: ColumnPr
 // ── Page ─────────────────────────────────────────────────────────────────────
 
 export default function InterviewsPage() {
+  const [scheduleOpen, setScheduleOpen] = useState(false);
+  const { toasts, showToast, removeToast } = useToast();
+
   const liveInterviews = INTERVIEWS.filter((i) => i.status === "live");
   const upcomingInterviews = [...INTERVIEWS]
     .filter((i) => i.status === "scheduled")
@@ -262,7 +267,12 @@ export default function InterviewsPage() {
               {liveInterviews.length} live · {upcomingInterviews.length} upcoming · {pastInterviews.length} completed
             </p>
           </div>
-          <Button variant="primary" size="sm" leftIcon={<Plus className="w-4 h-4" />}>
+          <Button
+            variant="primary"
+            size="sm"
+            leftIcon={<Plus className="w-4 h-4" />}
+            onClick={() => setScheduleOpen(true)}
+          >
             Schedule Interview
           </Button>
         </div>
@@ -311,6 +321,21 @@ export default function InterviewsPage() {
 
         </div>
       </div>
+
+      {scheduleOpen && (
+        <ScheduleInterviewModal
+          onConfirm={(data) => {
+            setScheduleOpen(false);
+            showToast(
+              `Interview scheduled for ${data.candidateName} on ${data.date} at ${data.time}`,
+              "success"
+            );
+          }}
+          onClose={() => setScheduleOpen(false)}
+        />
+      )}
+
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
     </div>
   );
 }

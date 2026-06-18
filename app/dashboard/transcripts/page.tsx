@@ -1,13 +1,18 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Header from "@/components/layout/Header";
 import { INTERVIEWS } from "@/lib/mock-data";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
+import ExportModal from "@/components/ui/ExportModal";
 import { Download, FileText } from "lucide-react";
 import Link from "next/link";
+import type { Interview } from "@/lib/types";
 
 export default function TranscriptsPage() {
   const completedInterviews = INTERVIEWS.filter((i) => i.status === "completed" && i.transcriptReady);
+  const [exportTarget, setExportTarget] = useState<Interview | null>(null);
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
@@ -78,6 +83,7 @@ export default function TranscriptsPage() {
                         variant="secondary"
                         size="xs"
                         leftIcon={<Download className="w-3 h-3" />}
+                        onClick={() => setExportTarget(iv)}
                       >
                         Export
                       </Button>
@@ -96,6 +102,17 @@ export default function TranscriptsPage() {
           )}
         </div>
       </div>
+
+      {exportTarget && (
+        <ExportModal
+          candidateName={exportTarget.candidateName}
+          jobTitle={exportTarget.jobTitle}
+          interviewDate={new Date(exportTarget.scheduledAt).toLocaleDateString("en-GB", {
+            day: "numeric", month: "short", year: "numeric",
+          })}
+          onClose={() => setExportTarget(null)}
+        />
+      )}
     </div>
   );
 }

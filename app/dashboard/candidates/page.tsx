@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import PageHeader from "@/components/layout/PageHeader";
 import { CANDIDATES } from "@/lib/mock-data";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
-import { Search, Star, MapPin, Briefcase, Filter, Users } from "lucide-react";
-import Link from "next/link";
+import { Search, Star, MapPin, Filter, Users } from "lucide-react";
 import type { PipelineStage } from "@/lib/types";
 
 const stageVariant: Record<PipelineStage, "neutral" | "info" | "warning" | "success" | "danger"> = {
@@ -20,8 +20,12 @@ const stageVariant: Record<PipelineStage, "neutral" | "info" | "warning" | "succ
 };
 
 export default function CandidatesPage() {
+  const router = useRouter();
   const [search, setSearch] = useState("");
   const [stageFilter, setStageFilter] = useState("all");
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [minScore, setMinScore] = useState(0);
+  const [minExp, setMinExp] = useState(0);
 
   const filtered = CANDIDATES.filter((c) => {
     const matchSearch =
@@ -29,8 +33,12 @@ export default function CandidatesPage() {
       c.currentRole.toLowerCase().includes(search.toLowerCase()) ||
       c.jobTitle.toLowerCase().includes(search.toLowerCase());
     const matchStage = stageFilter === "all" || c.stage === stageFilter;
-    return matchSearch && matchStage;
+    const matchScore = c.score >= minScore;
+    const matchExp = c.yearsExperience >= minExp;
+    return matchSearch && matchStage && matchScore && matchExp;
   });
+
+  const activeFilters = (minScore > 0 ? 1 : 0) + (minExp > 0 ? 1 : 0);
 
   const stageCounts: Record<string, number> = {
     all: CANDIDATES.length,
@@ -50,9 +58,81 @@ export default function CandidatesPage() {
           title="Candidates"
           description={`${CANDIDATES.length} total candidates`}
           actions={
-            <Button variant="secondary" size="sm" leftIcon={<Filter className="w-4 h-4" />}>
-              Filters
-            </Button>
+            <div className="relative">
+              <Button
+                variant="secondary"
+                size="sm"
+                leftIcon={<Filter className="w-4 h-4" />}
+                onClick={() => setFilterOpen((v) => !v)}
+              >
+                Filters
+                {activeFilters > 0 && (
+                  <span className="ml-1 px-1.5 py-0.5 text-[10px] font-bold bg-[#0E5E6F] text-white rounded-full">
+                    {activeFilters}
+                  </span>
+                )}
+              </Button>
+
+              {filterOpen && (
+                <div className="absolute right-0 top-9 z-30 w-64 bg-white border border-neutral-200 rounded-xl shadow-lg p-4 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-semibold text-neutral-700">Filters</p>
+                    <button
+                      onClick={() => { setMinScore(0); setMinExp(0); }}
+                      className="text-[10px] text-[#0E5E6F] hover:underline"
+                    >
+                      Reset
+                    </button>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-neutral-600 mb-2">
+                      Min AI Score: <span className="text-[#0E5E6F] font-bold">{minScore}</span>
+                    </label>
+                    <input
+                      type="range"
+                      min={0}
+                      max={100}
+                      step={10}
+                      value={minScore}
+                      onChange={(e) => setMinScore(Number(e.target.value))}
+                      className="w-full accent-[#0E5E6F]"
+                    />
+                    <div className="flex justify-between text-[10px] text-neutral-400 mt-0.5">
+                      <span>0</span><span>50</span><span>100</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-neutral-600 mb-2">
+                      Min Experience: <span className="text-[#0E5E6F] font-bold">{minExp}+ yrs</span>
+                    </label>
+                    <div className="flex gap-1.5 flex-wrap">
+                      {[0, 1, 3, 5, 8].map((y) => (
+                        <button
+                          key={y}
+                          onClick={() => setMinExp(y)}
+                          className={`px-2.5 py-1 text-xs rounded-lg border font-medium transition-colors ${
+                            minExp === y
+                              ? "bg-[#0E5E6F] text-white border-[#0E5E6F]"
+                              : "bg-white text-neutral-600 border-neutral-200 hover:border-neutral-300"
+                          }`}
+                        >
+                          {y === 0 ? "Any" : `${y}+`}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setFilterOpen(false)}
+                    className="w-full py-1.5 text-xs font-medium text-white bg-[#0E5E6F] rounded-lg hover:bg-[#09414D] transition-colors"
+                  >
+                    Apply
+                  </button>
+                </div>
+              )}
+            </div>
           }
         />
 
@@ -99,14 +179,14 @@ export default function CandidatesPage() {
                 <th className="text-left px-4 py-3 text-xs font-medium text-neutral-400">Stage</th>
                 <th className="text-left px-4 py-3 text-xs font-medium text-neutral-400">Score</th>
                 <th className="text-left px-4 py-3 text-xs font-medium text-neutral-400">Applied</th>
-                <th className="px-4 py-3" />
               </tr>
             </thead>
             <tbody>
               {filtered.map((c, idx) => (
                 <tr
                   key={c.id}
-                  className={`border-b border-neutral-100 hover:bg-neutral-50 transition-colors ${
+                  onClick={() => router.push(`/dashboard/candidates/${c.id}`)}
+                  className={`border-b border-neutral-100 hover:bg-neutral-50 transition-colors cursor-pointer ${
                     idx === filtered.length - 1 ? "border-b-0" : ""
                   }`}
                 >
@@ -149,11 +229,6 @@ export default function CandidatesPage() {
                   </td>
                   <td className="px-4 py-3 text-xs text-neutral-400">
                     {new Date(c.appliedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
-                  </td>
-                  <td className="px-4 py-3">
-                    <Link href={`/dashboard/candidates/${c.id}`}>
-                      <Button variant="ghost" size="xs">View</Button>
-                    </Link>
                   </td>
                 </tr>
               ))}
