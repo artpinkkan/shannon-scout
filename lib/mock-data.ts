@@ -1695,3 +1695,504 @@ export function formatTimestamp(seconds: number): string {
   }
   return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
 }
+
+// ─── Extra candidates for j1 ranking demo ────────────────────────────────────
+
+export const EXTRA_CANDIDATES: Candidate[] = [
+  {
+    id: "c13",
+    name: "Wahyu Adi Saputra",
+    email: "wahyu.adi@gmail.com",
+    phone: "+62 812-9876-0011",
+    location: "Depok",
+    currentRole: "Backend Engineer",
+    currentCompany: "Dana Indonesia",
+    yearsExperience: 5,
+    skills: ["Go", "gRPC", "PostgreSQL", "Docker", "Redis"],
+    education: "S1 Ilmu Komputer",
+    university: "Universitas Gunadarma",
+    gpa: 3.55,
+    languages: ["Bahasa Indonesia", "English"],
+    linkedIn: "linkedin.com/in/wahyu-adi-s",
+    avatarInitials: "WA",
+    avatarColor: "#8b5cf6",
+    stage: "screening",
+    jobId: "j1",
+    jobTitle: "Senior Software Engineer — Backend",
+    tenantId: "t1",
+    appliedAt: "2026-06-09",
+    score: 71,
+    tags: ["go_specialist", "microservices"],
+    notes: [],
+    resumeUrl: "/mock/resume-wahyu.pdf",
+  },
+  {
+    id: "c14",
+    name: "Nadia Lestari Putri",
+    email: "nadia.lestari@email.com",
+    phone: "+62 857-3344-5566",
+    location: "Tangerang",
+    currentRole: "Software Engineer",
+    currentCompany: "Bukalapak",
+    yearsExperience: 3,
+    skills: ["Java", "Node.js", "MySQL", "REST API", "Git"],
+    education: "S1 Teknik Informatika",
+    university: "Universitas Mercubuana",
+    gpa: 3.42,
+    languages: ["Bahasa Indonesia", "English"],
+    linkedIn: "linkedin.com/in/nadia-lestari",
+    avatarInitials: "NL",
+    avatarColor: "#ec4899",
+    stage: "screening",
+    jobId: "j1",
+    jobTitle: "Senior Software Engineer — Backend",
+    tenantId: "t1",
+    appliedAt: "2026-06-11",
+    score: 65,
+    tags: ["mid_level", "java_strong"],
+    notes: [],
+    resumeUrl: "/mock/resume-nadia.pdf",
+  },
+];
+
+// Merge extra candidates so helpers work uniformly
+CANDIDATES.push(...EXTRA_CANDIDATES);
+
+// Extra interviews supporting the ranking demo
+export const EXTRA_INTERVIEWS: Interview[] = [
+  {
+    id: "i10",
+    candidateId: "c13",
+    candidateName: "Wahyu Adi Saputra",
+    jobId: "j1",
+    jobTitle: "Senior Software Engineer — Backend",
+    tenantId: "t1",
+    interviewerName: "Budi Hartono",
+    interviewerRole: "Engineering Lead",
+    status: "completed",
+    scheduledAt: "2026-06-13T10:00:00",
+    durationMinutes: 55,
+    recordingUrl: "/mock/interview-i10.webm",
+    transcriptReady: true,
+    language: "mixed",
+    asrProvider: "Google STT",
+    wer: 8.8,
+  },
+  {
+    id: "i11",
+    candidateId: "c14",
+    candidateName: "Nadia Lestari Putri",
+    jobId: "j1",
+    jobTitle: "Senior Software Engineer — Backend",
+    tenantId: "t1",
+    interviewerName: "Budi Hartono",
+    interviewerRole: "Engineering Lead",
+    status: "completed",
+    scheduledAt: "2026-06-14T10:00:00",
+    durationMinutes: 50,
+    recordingUrl: "/mock/interview-i11.webm",
+    transcriptReady: true,
+    language: "mixed",
+    asrProvider: "Google STT",
+    wer: 9.1,
+  },
+  {
+    id: "i12",
+    candidateId: "c4",
+    candidateName: "Siti Nurhaliza Maharani",
+    jobId: "j2",
+    jobTitle: "Product Manager — Payments",
+    tenantId: "t1",
+    interviewerName: "Sari Dewi Kusuma",
+    interviewerRole: "Head of Product",
+    status: "completed",
+    scheduledAt: "2026-06-11T10:00:00",
+    durationMinutes: 45,
+    recordingUrl: "/mock/interview-i12.webm",
+    transcriptReady: true,
+    language: "mixed",
+    asrProvider: "Google STT",
+    wer: 9.5,
+  },
+];
+
+INTERVIEWS.push(...EXTRA_INTERVIEWS);
+
+// ─── Candidate Rankings ───────────────────────────────────────────────────────
+
+import type {
+  CandidateRanking,
+  AuditEntry,
+} from "./types";
+
+export const CANDIDATE_RANKINGS: CandidateRanking[] = [
+  // ── j1: Senior Software Engineer — Backend ──────────────────────────────
+  {
+    id: "rank-j1-c1",
+    jobId: "j1",
+    candidateId: "c1",
+    interviewId: "i1",
+    aiScore: 88,
+    scoreBreakdown: {
+      communicationClarity: 85,
+      technicalDepth: 92,
+      culturalFit: 88,
+      experienceRelevance: 87,
+    },
+    reasoning:
+      "Arief demonstrated exceptional technical depth with hands-on distributed systems experience at Tokopedia scale (50K TPS). His explanation of consistency trade-offs — separating a strong-consistent hot path from an eventual-consistent analytics path — reflects genuine architectural maturity. Communication was structured and confident throughout. Cultural fit signals were outstanding: he unprompted referenced psychological safety and weekly pair-programming cadence. Minor gap: limited financial-services domain exposure, though his curiosity about the banking stack was genuine.",
+    keyStrengths: [
+      "Distributed systems at 50K TPS (production-proven)",
+      "Consistency model expertise — hot path vs. analytics layer",
+      "Psychological safety focus — strong team-culture signal",
+    ],
+    transcriptEvidence: [
+      {
+        segmentId: "ts4",
+        interviewId: "i1",
+        dimension: "technicalDepth",
+        timestamp: 52,
+        quote:
+          "…service yang menangani order processing dengan throughput sekitar 50 ribu transaksi per detik. Kami menggunakan Go sebagai bahasa utama, dengan Kafka untuk messaging dan PostgreSQL dengan sharding strategy yang custom.",
+      },
+      {
+        segmentId: "ts6",
+        interviewId: "i1",
+        dimension: "technicalDepth",
+        timestamp: 120,
+        quote:
+          "Kami membagi arsitektur menjadi dua layer — hot path yang strong consistent, dan analytics path yang eventual. Ini memang memerlukan kompleksitas tambahan di aplikasi, tapi jauh lebih scalable.",
+      },
+      {
+        segmentId: "ts8",
+        interviewId: "i1",
+        dimension: "culturalFit",
+        timestamp: 194,
+        quote:
+          "…yang paling penting adalah membangun psychological safety dalam tim — semua orang harus merasa nyaman untuk bertanya dan membuat kesalahan.",
+      },
+    ],
+    generatedAt: "2026-06-10T10:45:00",
+  },
+  {
+    id: "rank-j1-c2",
+    jobId: "j1",
+    candidateId: "c2",
+    interviewId: "i7",
+    aiScore: 76,
+    scoreBreakdown: {
+      communicationClarity: 82,
+      technicalDepth: 74,
+      culturalFit: 80,
+      experienceRelevance: 72,
+    },
+    reasoning:
+      "Dewi brings solid Java/Spring Boot experience and exceptional academic credentials (GPA 3.85, ITB). Her multilingual capability (Bahasa, English, Mandarin) is a differentiated asset for cross-border projects. However, with 4 years of experience versus the 5-year minimum, she lacked depth on distributed systems at scale — she described patterns correctly but couldn't draw from large-scale production incidents. Cultural fit came through strongly in her collaborative tone and documentation habits.",
+    keyStrengths: [
+      "Multilingual (Bahasa / English / Mandarin)",
+      "Strong academic credentials — ITB GPA 3.85",
+      "Disciplined Architecture Decision Record (ADR) practice",
+    ],
+    transcriptEvidence: [
+      {
+        segmentId: "i7-ts3",
+        interviewId: "i7",
+        dimension: "technicalDepth",
+        timestamp: 88,
+        quote:
+          "Kami menggunakan Spring Boot dengan HikariCP untuk connection pooling, dan memisahkan read replica untuk query-query yang berat agar tidak mengganggu write path.",
+      },
+      {
+        segmentId: "i7-ts7",
+        interviewId: "i7",
+        dimension: "communicationClarity",
+        timestamp: 215,
+        quote:
+          "Saya selalu mendokumentasikan keputusan arsitektur dalam ADR — Architecture Decision Record — agar reasoning-nya bisa diaudit ke depan oleh siapapun yang join belakangan.",
+      },
+    ],
+    generatedAt: "2026-06-17T12:10:00",
+  },
+  {
+    id: "rank-j1-c13",
+    jobId: "j1",
+    candidateId: "c13",
+    interviewId: "i10",
+    aiScore: 71,
+    scoreBreakdown: {
+      communicationClarity: 75,
+      technicalDepth: 73,
+      culturalFit: 72,
+      experienceRelevance: 64,
+    },
+    reasoning:
+      "Wahyu demonstrated solid Go expertise with relevant microservices and gRPC experience at Dana Indonesia. His system-design answers were methodical but lacked the depth of scale seen in top candidates — he described idempotency and circuit-breaker patterns correctly but couldn't describe a production outage or war story. Cultural alignment appeared genuine, with emphasis on documentation and knowledge transfer to juniors.",
+    keyStrengths: [
+      "Go + gRPC microservices experience",
+      "Systematic, pattern-oriented design approach",
+      "Strong documentation and knowledge-transfer culture",
+    ],
+    transcriptEvidence: [
+      {
+        segmentId: "i10-ts4",
+        interviewId: "i10",
+        dimension: "technicalDepth",
+        timestamp: 105,
+        quote:
+          "Di Go, saya selalu memisahkan handler dari business logic dan domain model. Ini membuat unit testing jauh lebih mudah karena tidak ada side effect yang tersembunyi.",
+      },
+    ],
+    generatedAt: "2026-06-13T11:15:00",
+  },
+  {
+    id: "rank-j1-c14",
+    jobId: "j1",
+    candidateId: "c14",
+    interviewId: "i11",
+    aiScore: 65,
+    scoreBreakdown: {
+      communicationClarity: 70,
+      technicalDepth: 62,
+      culturalFit: 68,
+      experienceRelevance: 60,
+    },
+    reasoning:
+      "Nadia showed strong communication skills and professional demeanor with clear articulation of past projects at Bukalapak. Technical depth was the primary limitation — her distributed-systems knowledge is largely theoretical, and she deferred on several deep-dive questions around consistency and high-availability design. Recommended consideration for a junior-to-mid backend role rather than this senior position.",
+    keyStrengths: [
+      "Excellent communication clarity and structure",
+      "Attention to detail in API design and testing",
+      "High learning-agility signals from self-directed upskilling",
+    ],
+    transcriptEvidence: [
+      {
+        segmentId: "i11-ts3",
+        interviewId: "i11",
+        dimension: "communicationClarity",
+        timestamp: 78,
+        quote:
+          "Menurut saya, komunikasi yang efektif adalah kunci dalam distributed team. Saya selalu membuat summary setelah setiap meeting dengan action item yang jelas dan owner-nya.",
+      },
+    ],
+    generatedAt: "2026-06-14T11:00:00",
+  },
+
+  // ── j2: Product Manager — Payments ──────────────────────────────────────
+  {
+    id: "rank-j2-c3",
+    jobId: "j2",
+    candidateId: "c3",
+    interviewId: "i2",
+    aiScore: 91,
+    scoreBreakdown: {
+      communicationClarity: 90,
+      technicalDepth: 88,
+      culturalFit: 93,
+      experienceRelevance: 92,
+    },
+    reasoning:
+      "Rizky demonstrated mastery of the Indonesian payments ecosystem through the OVO PayLater case study: cross-functional execution from ideation to 200K-user launch in four months, data-driven prioritization using ICE/RICE frameworks, and tight OKR alignment. Stakeholder management was mature — he balanced business pressure with data integrity without compromising either. Cultural fit signals were outstanding: he proactively discussed user empathy and team dynamics. Highest-scoring candidate across all active roles this cycle.",
+    keyStrengths: [
+      "OVO PayLater launch — 200K users in month one",
+      "ICE / RICE + OKR-driven feature prioritization",
+      "Mature stakeholder management under pressure",
+    ],
+    transcriptEvidence: [
+      {
+        segmentId: "ts2_2",
+        interviewId: "i2",
+        dimension: "experienceRelevance",
+        timestamp: 24,
+        quote:
+          "…fitur OVO PayLater yang kami launch tahun lalu. Dari ideasi sampai launch hanya butuh empat bulan, dengan tim cross-functional… Kami berhasil onboard 200 ribu pengguna di bulan pertama.",
+      },
+      {
+        segmentId: "ts2_4",
+        interviewId: "i2",
+        dimension: "technicalDepth",
+        timestamp: 87,
+        quote:
+          "Saya menggunakan kombinasi framework ICE scoring dan RICE untuk prioritisasi awal, tapi yang lebih penting adalah memastikan alignment dengan company OKR.",
+      },
+    ],
+    generatedAt: "2026-06-08T14:52:00",
+  },
+  {
+    id: "rank-j2-c4",
+    jobId: "j2",
+    candidateId: "c4",
+    interviewId: "i12",
+    aiScore: 68,
+    scoreBreakdown: {
+      communicationClarity: 72,
+      technicalDepth: 65,
+      culturalFit: 70,
+      experienceRelevance: 65,
+    },
+    reasoning:
+      "Siti showed genuine enthusiasm for the payments space and solid foundational product thinking. At 3 years of experience, her strategic depth is still developing — she described execution tactics well but struggled with broader competitive framing and sizing questions. A high-potential candidate better suited for an Associate PM role, or revisited in 12–18 months for a senior opening.",
+    keyStrengths: [
+      "High energy and authentic payments enthusiasm",
+      "Strong user-research and A/B testing foundation",
+      "Clear GoPay activation-rate improvement results",
+    ],
+    transcriptEvidence: [
+      {
+        segmentId: "i12-ts5",
+        interviewId: "i12",
+        dimension: "experienceRelevance",
+        timestamp: 140,
+        quote:
+          "Di GoPay, saya berhasil meningkatkan activation rate fitur baru dari 12% menjadi 34% dalam dua kuartal dengan mengoptimalkan onboarding flow berdasarkan data drop-off.",
+      },
+    ],
+    generatedAt: "2026-06-11T11:00:00",
+  },
+
+  // ── j5: Analis Risiko Kredit Senior ─────────────────────────────────────
+  {
+    id: "rank-j5-c7",
+    jobId: "j5",
+    candidateId: "c7",
+    interviewId: "i3",
+    aiScore: 85,
+    scoreBreakdown: {
+      communicationClarity: 82,
+      technicalDepth: 88,
+      culturalFit: 84,
+      experienceRelevance: 86,
+    },
+    reasoning:
+      "Hendra demonstrated authoritative command of Indonesian banking regulation, correctly citing POJK Nomor 40 and implementing internal BMPK limits more conservative than the regulatory baseline (15% of Tier-1 capital vs. the OJK ceiling). His layered approach to concentration risk — combining limit frameworks, quarterly stress testing, and early-warning systems — reflects senior operational maturity. His communication was precise and domain-appropriate, and he showed clear alignment with BRN's compliance-forward culture.",
+    keyStrengths: [
+      "Deep POJK & OJK regulatory expertise (cites specific numbers)",
+      "Layered concentration-risk framework: limits + stress tests + EWS",
+      "Strong alignment with BRN compliance-forward culture",
+    ],
+    transcriptEvidence: [
+      {
+        segmentId: "ts3_2",
+        interviewId: "i3",
+        dimension: "experienceRelevance",
+        timestamp: 27,
+        quote:
+          "…ketika kami mengimplementasikan sistem penilaian kredit digital yang harus memenuhi POJK Nomor 40 tahun 2019 tentang penilaian kualitas aset bank umum.",
+      },
+      {
+        segmentId: "ts3_4",
+        interviewId: "i3",
+        dimension: "technicalDepth",
+        timestamp: 92,
+        quote:
+          "…kami menetapkan BMPK internal yang lebih konservatif dari ketentuan OJK — biasanya kami batasi di 15% dari modal tier 1. Kedua, kami melakukan stress testing triwulanan dengan skenario makro yang buruk.",
+      },
+    ],
+    generatedAt: "2026-06-12T09:48:00",
+  },
+];
+
+// ─── Audit Entries ────────────────────────────────────────────────────────────
+
+export const AUDIT_ENTRIES: AuditEntry[] = [
+  {
+    id: "audit-001",
+    timestamp: "2026-06-10T10:45:00",
+    actor: "Budi Hartono",
+    action: "AI Score generated — score 88",
+    entityType: "ranking_generated",
+    candidateId: "c1",
+    jobId: "j1",
+    details: "Arief Rahmat Hidayat scored 88 after interview i1 (60 min, Google STT)",
+  },
+  {
+    id: "audit-002",
+    timestamp: "2026-06-10T11:02:00",
+    actor: "Sari Dewi Kusuma",
+    action: "Stage advanced → Decision",
+    entityType: "stage_advanced",
+    candidateId: "c1",
+    jobId: "j1",
+    details: "Arief Rahmat Hidayat moved from Interview → Decision stage",
+  },
+  {
+    id: "audit-003",
+    timestamp: "2026-06-13T11:15:00",
+    actor: "Budi Hartono",
+    action: "AI Score generated — score 71",
+    entityType: "ranking_generated",
+    candidateId: "c13",
+    jobId: "j1",
+    details: "Wahyu Adi Saputra scored 71 after interview i10 (55 min, Google STT)",
+  },
+  {
+    id: "audit-004",
+    timestamp: "2026-06-14T11:00:00",
+    actor: "Budi Hartono",
+    action: "AI Score generated — score 65",
+    entityType: "ranking_generated",
+    candidateId: "c14",
+    jobId: "j1",
+    details: "Nadia Lestari Putri scored 65 after interview i11 (50 min, Google STT)",
+  },
+  {
+    id: "audit-005",
+    timestamp: "2026-06-17T12:10:00",
+    actor: "Budi Hartono",
+    action: "AI Score generated — score 76",
+    entityType: "ranking_generated",
+    candidateId: "c2",
+    jobId: "j1",
+    details: "Dewi Fitriani Putri scored 76 after interview i7 (60 min, Google STT)",
+  },
+  {
+    id: "audit-006",
+    timestamp: "2026-06-08T14:52:00",
+    actor: "Sari Dewi Kusuma",
+    action: "AI Score generated — score 91",
+    entityType: "ranking_generated",
+    candidateId: "c3",
+    jobId: "j2",
+    details: "Rizky Pratama Nugroho scored 91 after interview i2 (45 min, Google STT)",
+  },
+  {
+    id: "audit-007",
+    timestamp: "2026-06-08T15:10:00",
+    actor: "Sari Dewi Kusuma",
+    action: "Stage advanced → Decision",
+    entityType: "stage_advanced",
+    candidateId: "c3",
+    jobId: "j2",
+    details: "Rizky Pratama Nugroho moved from Interview → Decision stage",
+  },
+  {
+    id: "audit-008",
+    timestamp: "2026-06-11T11:00:00",
+    actor: "Sari Dewi Kusuma",
+    action: "AI Score generated — score 68",
+    entityType: "ranking_generated",
+    candidateId: "c4",
+    jobId: "j2",
+    details: "Siti Nurhaliza Maharani scored 68 after interview i12 (45 min, Google STT)",
+  },
+  {
+    id: "audit-009",
+    timestamp: "2026-06-12T09:48:00",
+    actor: "Ahmad Fauzi",
+    action: "AI Score generated — score 85",
+    entityType: "ranking_generated",
+    candidateId: "c7",
+    jobId: "j5",
+    details: "Hendra Wijaya Santoso scored 85 after interview i3 (75 min, Azure Speech)",
+  },
+];
+
+// ─── Ranking helpers ──────────────────────────────────────────────────────────
+
+export function getRankingsByJobId(jobId: string): CandidateRanking[] {
+  return CANDIDATE_RANKINGS.filter((r) => r.jobId === jobId);
+}
+
+export function getAuditEntriesByJobId(jobId: string): AuditEntry[] {
+  return AUDIT_ENTRIES.filter((a) => a.jobId === jobId).sort(
+    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+  );
+}

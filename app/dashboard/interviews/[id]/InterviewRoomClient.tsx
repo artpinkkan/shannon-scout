@@ -249,7 +249,7 @@ export default function InterviewRoomClient() {
           <VADIndicator active={isVadActive && isRecording} />
 
           <button
-            onClick={() => router.push("/dashboard/interviews")}
+            onClick={() => router.push(`/dashboard/jobs/${interview.jobId}/ranking`)}
             className="flex items-center gap-2 px-3 h-8 bg-[#C0392B] hover:bg-[#a93226] text-white text-xs font-medium rounded-lg transition-colors"
           >
             End interview →

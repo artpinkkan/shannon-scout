@@ -253,3 +253,64 @@ export interface TenantUsage {
   planTier: string;
   complianceFlag: boolean;
 }
+
+// ─── Candidate Ranking ────────────────────────────────────────────────────────
+
+export type ScoreDimension =
+  | "communicationClarity"
+  | "technicalDepth"
+  | "culturalFit"
+  | "experienceRelevance";
+
+export interface ScoreBreakdown {
+  communicationClarity: number;
+  technicalDepth: number;
+  culturalFit: number;
+  experienceRelevance: number;
+}
+
+export interface TranscriptEvidence {
+  segmentId: string;
+  interviewId: string;
+  dimension: ScoreDimension;
+  timestamp: number;
+  quote: string;
+}
+
+export interface CandidateRanking {
+  id: string;
+  jobId: string;
+  candidateId: string;
+  interviewId: string;
+  aiScore: number;
+  scoreBreakdown: ScoreBreakdown;
+  reasoning: string;
+  keyStrengths: string[];
+  transcriptEvidence: TranscriptEvidence[];
+  generatedAt: string;
+}
+
+export type NextActionType =
+  | "medical_checkup"
+  | "employment_agreement"
+  | "custom";
+
+// ─── Audit Trail ─────────────────────────────────────────────────────────────
+
+export type AuditEntityType =
+  | "ranking_generated"
+  | "stage_advanced"
+  | "document_sent"
+  | "medical_requested"
+  | "custom_action";
+
+export interface AuditEntry {
+  id: string;
+  timestamp: string;
+  actor: string;
+  action: string;
+  entityType: AuditEntityType;
+  candidateId: string;
+  jobId: string;
+  details: string;
+}

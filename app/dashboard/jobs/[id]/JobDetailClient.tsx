@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import PageHeader from "@/components/layout/PageHeader";
 import {
@@ -26,6 +26,7 @@ import {
   Phone,
   ExternalLink,
   Tag,
+  BarChart2,
 } from "lucide-react";
 
 const STAGES: { id: PipelineStage; label: string; color: string }[] = [
@@ -99,6 +100,7 @@ function CandidateCard({
 
 export default function JobDetailClient() {
   const params = useParams();
+  const router = useRouter();
   const jobId = params.id as string;
   const job = getJobById(jobId);
   const allCandidates = getCandidatesByJobId(jobId);
@@ -134,6 +136,14 @@ export default function JobDetailClient() {
               <Badge variant={job.status === "active" ? "success" : "warning"}>
                 {job.status.charAt(0).toUpperCase() + job.status.slice(1)}
               </Badge>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => router.push(`/dashboard/jobs/${jobId}/ranking`)}
+              >
+                <BarChart2 className="w-3.5 h-3.5 mr-1.5" />
+                View Rankings
+              </Button>
               <Button variant="secondary" size="sm">Edit Job</Button>
             </div>
           }
