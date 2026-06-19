@@ -200,16 +200,6 @@ export default function DashboardPage() {
               ))}
             </div>
 
-            <div className="mt-4 pt-4 border-t border-neutral-100">
-              <p className="text-xs text-neutral-400 mb-1">Monthly Spend</p>
-              <p className="text-lg font-bold text-neutral-900">
-                {formatCurrency(ADMIN_STATS.totalCostThisMonth)}
-              </p>
-              <div className="mt-2 h-1.5 bg-neutral-100 rounded-full overflow-hidden">
-                <div className="h-full bg-[#0E5E6F] rounded-full" style={{ width: "67%" }} />
-              </div>
-              <p className="text-[10px] text-neutral-400 mt-1">67% of monthly budget</p>
-            </div>
           </div>
         </div>
 
